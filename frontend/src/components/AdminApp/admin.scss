@@ -1,6 +1,8 @@
+$app-primary-color:rgb(27, 58, 87);
 $primary-logo-color:#1F2D88;
+$light-blue-color:rgb(26, 115, 232);
 $sub-logo-color:#EC1C25;
-$appbar-color:rgb(26, 115, 232);
+$appbar-color:rgb(57, 73, 171);
 $sidebar-color:rgb(37, 42, 43);
 $navlink-active: rgb(102, 157, 246);
 $grey-100:#f5f5f5;
@@ -8,13 +10,27 @@ $grey-200:#eee;
 $grey-300:#e0e0e0;
 $grey-400:#bdbdbd;
 $grey-500:#9e9e9e;
+$sidebar-border:1px solid rgba($grey-500, .3);
+$section-title-color:rgb(71, 98, 130);
+
+.section-title-color {
+    color: $section-title-color;
+}
+
+.light-blue-bgcolor {
+    background-color: $light-blue-color !important;
+}
+
+.light-blue-color {
+    color: $light-blue-color !important;
+}
 
 .primary-logo-color {
-    color: $primary-logo-color;
+    color: $primary-logo-color !important;
 }
 
 .sub-logo-color {
-    color: $sub-logo-color;
+    color: $sub-logo-color !important;
 }
 
 .text-inherit {
@@ -22,15 +38,41 @@ $grey-500:#9e9e9e;
 }
 
 .admin-wrapper {
-    height: 100%;
+    min-height: 100%;
     display: flex;
     flex-direction: column;
+    color: $app-primary-color;
 
     main {
-        background-color: rgb(247, 249, 252);
+        background-color: rgb(244, 246, 248);
         flex: 1;
         display: flex;
-        padding: 30px;
+        padding: 15px 5px 30px 5px;
+        min-height: calc(100vh - 60px);
+    }
+
+    .MuiTableCell-head {
+        font-weight: 600;
+    }
+
+    .page-breadcrumb {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+
+        a {
+            color: inherit;
+        }
+
+        li:last-child {
+            color: $app-primary-color;
+        }
+    }
+
+    .content {
+        @media (min-width:992px) {
+            margin-left: 256px;
+        }
     }
 
     .login-page {
@@ -77,11 +119,65 @@ $grey-500:#9e9e9e;
         padding: 8px 10px;
         position: sticky;
         top: 0;
-        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.49);
+        box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.49);
+        z-index: 1000;
+
+        #toggle-button {
+            @media (min-width:992px) {
+                display: none;
+            }
+        }
 
         * {
             color: inherit;
         }
+    }
+
+    .page-title {
+        font-size: 25px;
+        font-weight: 700;
+        margin-bottom: 0;
+    }
+
+    .section-title {
+        font-size: 16px;
+        font-weight: 700;
+        padding: 12px 0;
+        color: $section-title-color;
+    }
+
+    .feature-card {
+        font-size: 17px;
+        font-weight: 700;
+        color: inherit;
+
+        &.course-create {
+            background: linear-gradient(180deg, rgba(32, 114, 163, 1) 0%, rgba(98, 164, 207, 1) 100%);
+
+            .feature-card-action {
+                background: rgb(98, 164, 207);
+            }
+        }
+
+        &.course-list {
+            background: linear-gradient(180deg, rgba(176, 129, 40, 1) 0%, rgba(226, 185, 127, 1) 100%);
+
+            .feature-card-action {
+                background: rgb(226, 185, 127);
+            }
+        }
+    }
+
+    .feature-card-action {
+        height: 200px;
+        color: white;
+        text-align: center;
+    }
+
+    .feature-card-header {
+        color: white;
+        text-align: center;
+        background-color: transparent;
     }
 
 }
@@ -91,8 +187,25 @@ $grey-500:#9e9e9e;
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: $sidebar-color;
-    color: $grey-300;
+    background-color: white;
+    color: rgb(84, 110, 122);
+    border-right: 1px solid rgba($grey-500, .5);
+
+    &.persist {
+        display: none;
+        position: fixed;
+        margin-top: 60px;
+        padding-top: 10px;
+        height: calc(100% - 60px);
+
+        @media (min-width:992px) {
+            display: flex;
+        }
+
+        .sidebar-header {
+            display: none;
+        }
+    }
 
     .sidebar-header {
         height: 60px;
@@ -100,7 +213,6 @@ $grey-500:#9e9e9e;
         justify-content: flex-end;
         align-items: center;
         padding-right: 10px;
-        border-bottom: 1px solid rgba($grey-500, .3);
     }
 
     .sidebar-content {
@@ -110,18 +222,18 @@ $grey-500:#9e9e9e;
     }
 
     .sidebar-footer {
-        border-top: 1px solid rgba($grey-500, .3);
+        border-top: $sidebar-border;
         text-align: center;
         padding: 10px;
     }
 
     .sidebar-item {
         height: 40px;
-        border-bottom: 1px solid rgba($grey-500, .3);
+        border-bottom: $sidebar-border;
         display: flex;
         align-items: center;
         padding: 0 15px;
-        color: $grey-400;
+        color: inherit;
         font-size: 14px;
         font-weight: 900;
 
@@ -134,14 +246,14 @@ $grey-500:#9e9e9e;
             padding: 0 30px;
         }
 
-        &.active{
+        &.active {
             color: $navlink-active;
         }
     }
 
     .sidebar-list {
         height: 60px;
-        border-bottom: 1px solid rgba($grey-500, .3);
+        border-bottom: $sidebar-border;
         transition: background 250ms ease-in-out;
         display: flex;
         justify-content: space-between;

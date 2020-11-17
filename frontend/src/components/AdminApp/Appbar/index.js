@@ -1,7 +1,8 @@
 import { Drawer, IconButton } from '@material-ui/core'
 import { useState } from 'react'
 import { AiOutlineMenu, AiFillSetting } from 'react-icons/ai'
-import logo_truong from '../../../assets/logo_187px.png'
+import { Link } from 'react-router-dom'
+import logo_truong from '../../../assets/logo_noname.png'
 import Sidebar from './sidebar'
 
 const Appbar = () => {
@@ -9,12 +10,12 @@ const Appbar = () => {
 
     return (
         <div className="appbar">
-            <IconButton onClick={() => setSidebarToggle(!sidebarToggle)}>
+            <IconButton id="toggle-button" onClick={() => setSidebarToggle(!sidebarToggle)}>
                 <AiOutlineMenu />
             </IconButton>
-            <div>
-                <img height="60px" src={logo_truong} alt="logo" />
-            </div>
+            <Link to="/">
+                <img src={logo_truong} alt="logo" height="50px" className="mx-3" />
+            </Link>
             <div>
                 <IconButton>
                     <AiFillSetting />

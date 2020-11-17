@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MdAddCircleOutline, MdHome, MdKeyboardArrowUp } from 'react-icons/md'
+import { MdHome, MdKeyboardArrowUp } from 'react-icons/md'
 import { VscClose } from 'react-icons/vsc'
 import { NavLink } from 'react-router-dom'
 import { BiBookAdd } from 'react-icons/bi'
@@ -26,7 +26,7 @@ const SidebarText = styled.span`
 `
 
 const CollapseList = (props) => {
-    const [collapsed, setCollapsed] = useState(true)
+    const [collapsed, setCollapsed] = useState(false)
 
     return <>
         <div onClick={() => setCollapsed(!collapsed)} className="sidebar-list">
@@ -41,7 +41,7 @@ const CollapseList = (props) => {
 
 const Sidebar = (props) => {
     return (
-        <div className="sidebar">
+        <div className={`sidebar ${props.class}`}>
             <header className="sidebar-header">
                 <CloseButton onClick={props.close}>
                     <VscClose size="25px" />
@@ -53,33 +53,13 @@ const Sidebar = (props) => {
                     <SidebarText>Trang chủ</SidebarText>
                 </NavLink>
                 <CollapseList text="Môn học">
-                    <NavLink exact to='/courses/create' className="sidebar-item nested">
+                    <NavLink exact to='/course' className="sidebar-item nested">
+                        <AiOutlineEye size="18px" />
+                        <SidebarText>Xem</SidebarText>
+                    </NavLink>
+                    <NavLink exact to='/course/create' className="sidebar-item nested">
                         <BiBookAdd size="18px" />
                         <SidebarText>Thêm mới</SidebarText>
-                    </NavLink>
-                    <NavLink exact to='/courses/list' className="sidebar-item nested">
-                        <AiOutlineEye size="18px" />
-                        <SidebarText>Xem</SidebarText>
-                    </NavLink>
-                </CollapseList>
-                <CollapseList text="Ngành">
-                    <NavLink exact to='/major/create' className="sidebar-item nested">
-                        <MdAddCircleOutline size="18px" />
-                        <SidebarText>Thêm mới</SidebarText>
-                    </NavLink>
-                    <NavLink exact to='/major/list' className="sidebar-item nested">
-                        <AiOutlineEye size="18px" />
-                        <SidebarText>Xem</SidebarText>
-                    </NavLink>
-                </CollapseList>
-                <CollapseList text="Loại môn học">
-                    <NavLink exact to='/coursetype/create' className="sidebar-item nested">
-                        <MdAddCircleOutline size="18px" />
-                        <SidebarText>Thêm mới</SidebarText>
-                    </NavLink>
-                    <NavLink exact to='/coursetype/list' className="sidebar-item nested">
-                        <AiOutlineEye size="18px" />
-                        <SidebarText>Xem</SidebarText>
                     </NavLink>
                 </CollapseList>
             </div>

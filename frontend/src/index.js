@@ -4,10 +4,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import App from './App';
 import { Provider } from 'react-redux';
+import store from './store'
 
 ReactDOM.render(
   <Router>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </Router>,
   document.getElementById('root')
 )
