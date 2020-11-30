@@ -5,14 +5,16 @@ import {
     FETCH_COURSE_GOAL_PENDING,
     FETCH_COURSE_GOAL_SUCCESS,
     FETCH_COURSE_GOAL_FAIL,
+    DELETE_COURSE_GOAL_SUCCESS,
     FETCH_COURSE_OUTCOME_PENDING,
     FETCH_COURSE_OUTCOME_SUCCESS,
-    FETCH_COURSE_OUTCOME_FAIL
+    FETCH_COURSE_OUTCOME_FAIL,
+    UPDATE_COURSE_GOAL_SUCCESS
 }
     from '../constants/ActionTypes'
 
 const initialState = {
-    loading: false,
+    pending: false,
     error: null,
     data: null
 }
@@ -24,8 +26,8 @@ const courseDetailReducer = (state = {}, action) => {
         case FETCH_COURSE_PENDING:
             course = {}
             course[action.payload] = {
-                loading: true,
-                error: ''
+                pending: true,
+                error: null
             }
             return {
                 ...state,
@@ -47,45 +49,62 @@ const courseDetailReducer = (state = {}, action) => {
         case FETCH_COURSE_FAIL:
             course = {}
             course[action.payload.mamh] = {
-                loading: false,
+                pending: false,
                 error: action.payload.error
             }
             return {
                 ...state,
                 ...course
             }
-        ////AFTER THAT
+        ////
         //GOAL
         case FETCH_COURSE_GOAL_PENDING:
             course = { ...state }
             course[action.payload].goal = {
                 ...course[action.payload].goal,
-                loading: true,
-                error: ''
-            }
-            return course
-        case FETCH_COURSE_GOAL_SUCCESS:
-            course = { ...state }
-            course[action.payload.mamh].goal = {
-                ...course[action.payload.mamh].goal,
-                loading: false,
-                data: action.payload.data
+                pending: true,
+                error: null
             }
             return course
         case FETCH_COURSE_GOAL_FAIL:
             course = { ...state }
             course[action.payload.mamh].goal = {
                 ...course[action.payload.mamh].goal,
-                loading: false,
+                pending: false,
                 error: action.payload.error
             }
+            return course
+        case FETCH_COURSE_GOAL_SUCCESS:
+            course = { ...state }
+            course[action.payload.mamh].goal = {
+                ...course[action.payload.mamh].goal,
+                pending: false,
+                data: action.payload.data
+            }
+            return course
+        case DELETE_COURSE_GOAL_SUCCESS:
+            course = { ...state }
+            course[action.payload.mamh].goal = {
+                ...course[action.payload.mamh].goal,
+                pending: false,
+                data: state[action.payload.mamh].goal.data
+                    .filter(goal => goal.muctieu !== action.payload.muctieu)
+            }
+            return course
+        case UPDATE_COURSE_GOAL_SUCCESS:
+            course = { ...state }
+            course[action.payload.mamh].goal.data =
+                course[action.payload.mamh].goal.data
+                    .map(item => item.muctieu === action.payload.muctieu
+                        ? action.payload.data
+                        : item)
             return course
         //OUTCOME
         case FETCH_COURSE_OUTCOME_PENDING:
             course = { ...state }
             course[action.payload].outcome = {
                 ...course[action.payload].outcome,
-                loading: true,
+                pending: true,
                 error: ''
             }
             return course
@@ -93,7 +112,7 @@ const courseDetailReducer = (state = {}, action) => {
             course = { ...state }
             course[action.payload.mamh].outcome = {
                 ...course[action.payload.mamh].outcome,
-                loading: false,
+                pending: false,
                 data: action.payload.data
             }
             return course
@@ -101,7 +120,7 @@ const courseDetailReducer = (state = {}, action) => {
             course = { ...state }
             course[action.payload.mamh].outcome = {
                 ...course[action.payload.mamh].outcome,
-                loading: false,
+                pending: false,
                 error: action.payload.error
             }
             return course

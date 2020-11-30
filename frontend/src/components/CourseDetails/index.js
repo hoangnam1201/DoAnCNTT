@@ -1,17 +1,17 @@
 import { Breadcrumbs, Button, makeStyles, Tab, Tabs } from "@material-ui/core"
 import { useState } from "react"
-import useBreadcrumbs, { routeConfig } from "../../../hooks/useBreadcrumbs"
+import useBreadcrumbs, { routeConfig } from "../../hooks/useBreadcrumbs"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { Link, useHistory, useParams } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
-import { fetchCourse } from "../../../store/actions/courseDetail.action"
+import { fetchCourse } from "../../store/actions/courseDetail.action"
 import { useEffect } from "react"
-import CourseInfo from "./courseInfo"
-import CourseGoal from "./courseGoal"
-import CourseOutcome from "./courseOutcome"
-import CourseEvualate from "./courseEvualate"
-import CourseContent from "./courseContent"
-import { ErrorPage, LoadingPage } from "../../StatelessPage"
+import CourseInfo from "./CourseInfo"
+import CourseGoal from "./CourseGoal"
+import CourseOutcome from "./CourseOutcome"
+import CourseEvualate from "./CourseEvualate"
+import CourseContent from "./CourseContent"
+import { ErrorPage, LoadingPage } from "../StatelessComponents"
 
 const useStyles = makeStyles({
     tabRoot: {
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     }
 })
 
-const CoursePage = () => {
+const CourseDetails = () => {
     const [value, setValue] = useState('info')
     const mamh = useParams().mamh
     const classes = useStyles()
@@ -130,4 +130,4 @@ const CoursePage = () => {
     </>
 }
 
-export default CoursePage
+export default CourseDetails

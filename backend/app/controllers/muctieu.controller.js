@@ -4,11 +4,14 @@ const muctieu = Models.muctieu
 const monhoc = Models.muctieu
 
 /* Lay thong tin muc tieu 1 mon hoc */
-exports.read = function (req, res) {
+exports.readAll = function (req, res) {
     muctieu.findAll({
         where: {
             ma_monhoc: req.params.mamh
-        }
+        },
+        order: [
+            ['id', 'ASC']
+        ]
     })
         .then(data => {
             data = data.map(muctieu => ({
@@ -16,6 +19,23 @@ exports.read = function (req, res) {
                 mota: muctieu.mota,
                 cdr_ctdt: muctieu.cdr_ctdt
             }))
+            return res.status(200).send(data)
+        })
+        .catch(err => res.status(400).send(err))
+}
+
+exports.readList = function (req, res) {
+    muctieu.findAll({
+        where: {
+            ma_monhoc: req.params.mamh
+        },
+        order: [
+            ['id', 'ASC']
+        ],
+        attributes: ['id']
+    })
+        .then(data => {
+            data = data.map(muctieu => muctieu.id)
             return res.status(200).send(data)
         })
         .catch(err => res.status(400).send(err))
@@ -29,7 +49,7 @@ exports.create = function (req, res) {
         cdr_ctdt: req.body.cdr_ctdt,
         mota: req.body.mota
     })
-        .then(success => res.sendStatus(200))
+        .then(() => res.sendStatus(200))
         .catch(err => res.status(500).send(err))
 }
 
@@ -39,12 +59,25 @@ exports.update = function (req, res) {
         id: req.body.muctieu,
         cdr_ctdt: req.body.cdr_ctdt,
         mota: req.body.mota
-    },{
-        where:{
+    }, {
+        where: {
             id: req.params.muctieu,
             ma_monhoc: req.params.mamh
         }
     })
         .then(success => res.sendStatus(200))
+        .catch(err => res.status(500).send(err))
+}
+
+//Xoa muc tieu
+exports.delete = function (req, res) {
+    console.log("DELETING")
+    muctieu.destroy({
+        where: {
+            id: req.params.muctieu,
+            ma_monhoc: req.params.mamh
+        }
+    })
+        .then(() => res.sendStatus(200))
         .catch(err => res.status(500).send(err))
 }

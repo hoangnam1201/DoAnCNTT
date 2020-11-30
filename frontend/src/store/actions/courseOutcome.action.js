@@ -11,9 +11,9 @@ const fetchOutcomePending = mamh => ({
     payload: mamh
 })
 
-const fetchOutcomeSuccess = data => ({
+const fetchOutcomeSuccess = (mamh, data) => ({
     type: FETCH_COURSE_OUTCOME_SUCCESS,
-    payload: data
+    payload: { mamh, data }
 })
 
 const fetchOutcomeFail = (mamh, error) => ({
@@ -23,12 +23,10 @@ const fetchOutcomeFail = (mamh, error) => ({
 
 export const fetchOutcome = mamh => {
     return dispatch => {
-        console.log(fetchOutcomePending(mamh))
         dispatch(fetchOutcomePending(mamh))
         getCourseOutcome(mamh)
-            .then(data => ({ mamh, data }))
             .then(data => {
-                dispatch(fetchOutcomeSuccess(data))
+                dispatch(fetchOutcomeSuccess(mamh, data))
             })
             .catch(err => {
                 dispatch(fetchOutcomeFail(mamh, err.message))

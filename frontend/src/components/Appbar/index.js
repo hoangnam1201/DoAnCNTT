@@ -2,7 +2,7 @@ import { Drawer, IconButton } from '@material-ui/core'
 import { useState } from 'react'
 import { AiOutlineMenu, AiFillSetting } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import logo_truong from '../../../assets/logo_noname.png'
+import logo_truong from '../../assets/logo_noname.png'
 import Sidebar from './sidebar'
 
 const Appbar = () => {

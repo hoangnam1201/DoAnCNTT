@@ -1,7 +1,9 @@
 import {
     FETCH_COURSE_GOAL_PENDING,
     FETCH_COURSE_GOAL_SUCCESS,
-    FETCH_COURSE_GOAL_FAIL
+    FETCH_COURSE_GOAL_FAIL,
+    DELETE_COURSE_GOAL_SUCCESS,
+    UPDATE_COURSE_GOAL_SUCCESS
 }
     from '../constants/ActionTypes'
 import { getCourseGoal } from '../../services'
@@ -11,24 +13,42 @@ const fetchGoalPending = mamh => ({
     payload: mamh
 })
 
-const fetchGoalSuccess = data => ({
-    type: FETCH_COURSE_GOAL_SUCCESS,
-    payload: data
-})
-
 const fetchGoalFail = (mamh, error) => ({
     type: FETCH_COURSE_GOAL_FAIL,
     payload: { mamh, error }
 })
 
+const fetchGoalSuccess = (mamh, data) => ({
+    type: FETCH_COURSE_GOAL_SUCCESS,
+    payload: {
+        mamh,
+        data
+    }
+})
+
+export const updateGoalSuccess = (mamh, muctieu, data) => ({
+    type: UPDATE_COURSE_GOAL_SUCCESS,
+    payload: {
+        mamh,
+        muctieu,
+        data
+    }
+})
+
+export const deleteGoalSuccess = (mamh, muctieu) => ({
+    type: DELETE_COURSE_GOAL_SUCCESS,
+    payload: {
+        mamh,
+        muctieu
+    }
+})
+
 export const fetchGoal = mamh => {
     return dispatch => {
-        console.log(fetchGoalPending(mamh))
         dispatch(fetchGoalPending(mamh))
         getCourseGoal(mamh)
-            .then(data => ({ mamh, data }))
             .then(data => {
-                dispatch(fetchGoalSuccess(data))
+                dispatch(fetchGoalSuccess(mamh, data))
             })
             .catch(err => {
                 dispatch(fetchGoalFail(mamh, err.message))

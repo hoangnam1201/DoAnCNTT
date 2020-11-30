@@ -1,30 +1,27 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
-import { LoadingRows } from "../SituationRow"
+import { LoadingRows } from "../../SituationRow"
 
-const CourseOutcome = () => {
+const CourseContent = () => {
     return <TableContainer className="p-2" component={Paper}>
-        <Table style={{minWidth:"700px"}}>
+        <Table style={{minWidth:"600px"}}>
             <TableHead>
                 <TableRow>
-                    <TableCell width="100px" align="center" size="small">
-                        Mục tiêu
-                    </TableCell>
-                    <TableCell width="110px" align="center" size="small">
-                        Chuẩn đầu ra HP
+                    <TableCell width="120px" align="center" size="small">
+                        Tuần
                     </TableCell>
                     <TableCell align="center" size="small">
-                        Mô tả
+                        Nội dung
                     </TableCell>
                     <TableCell width="150px" align="center" size="small">
-                        Chuẩn đầu ra CDIO
+                        Chuẩn đầu ra học phần
                     </TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
-                <LoadingRows col={4} />
+                <LoadingRows col={3} />
             </TableBody>
         </Table>
     </TableContainer>
 }
 
-export default CourseOutcome
+export default CourseContent

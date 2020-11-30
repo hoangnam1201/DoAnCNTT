@@ -6,18 +6,25 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useEffect } from 'react';
-import { Breadcrumbs, TableFooter } from '@material-ui/core';
+import { Breadcrumbs } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import useBreadcrumbs, { routeConfig } from "../../../hooks/useBreadcrumbs"
+import useBreadcrumbs, { routeConfig } from "../../hooks/useBreadcrumbs"
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCourses } from '../../../store/actions/courses.action';
+import { fetchCourses } from '../../store/actions/courses.action';
 import ErrorTable from './errorTable';
 import EmptyTable from './emptyTable';
 import LoadingTable from './loadingTable'
 import CourseRow from './courseRow';
 import { useState } from 'react';
 import FilterBar from './filter';
+
+const removeAccents = str => {
+    return str.normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd').replace(/Đ/g, 'D');
+}
+
 
 const CourseList = () => {
     const initialFilter = {
@@ -30,12 +37,12 @@ const CourseList = () => {
     const dispatch = useDispatch()
     const breadcrumbs = useBreadcrumbs(routeConfig)
     const courseList = useSelector(state => state.courses)
-    console.log(courseList)
     const [filter, setFilter] = useState(initialFilter)
     const filteredCourseList = !courseList.data
         ? []
         : courseList.data.filter(course => (
-            course.tenmh.toLowerCase().includes(filter.tenmh.toLowerCase()) &&
+            removeAccents(course.tenmh).toLowerCase()
+                .includes(removeAccents(filter.tenmh).toLowerCase()) &&
             course.bomon.includes(filter.bomon) &&
             course.phanloai.includes(filter.phanloai) &&
             course.sotinchi.toString().includes(filter.sotinchi)
@@ -92,13 +99,11 @@ const CourseList = () => {
                                     ? <ErrorTable refresh={refresh} />
                                     : filteredCourseList.length !== 0
                                         ? filteredCourseList.map(row => (
-                                            <CourseRow row={row} />
+                                            <CourseRow row={row} key={row.mamh} />
                                         ))
                                         : <EmptyTable />
                         }
                     </TableBody>
-                    <TableFooter>
-                    </TableFooter>
                 </Table>
             </TableContainer>
         </>

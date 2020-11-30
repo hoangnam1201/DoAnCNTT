@@ -1,6 +1,6 @@
 import { Button, TextField } from '@material-ui/core'
 import styled from 'styled-components'
-import logo_truong from '../../../assets/logo-truong-name.png'
+import logo_truong from '../../assets/logo-truong-name.png'
 
 const Hr = styled.hr`
     margin: 40px 0;

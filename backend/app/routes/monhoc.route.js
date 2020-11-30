@@ -13,9 +13,11 @@ router.put('/:mamh', monhocController.update)
 router.delete('/:mamh', monhocController.delete)
 
 /* Muc tieu */
-router.get('/:mamh/muctieu', muctieuController.read)
+router.get('/:mamh/muctieu', muctieuController.readAll)
+router.get('/:mamh/muctieu/list', muctieuController.readList)
 router.post('/:mamh/muctieu', muctieuController.create)
 router.put('/:mamh/muctieu/:muctieu', muctieuController.update)
+router.delete('/:mamh/muctieu/:muctieu', muctieuController.delete)
 
 /* Chuan dau ra */
 router.get('/:mamh/chuandaura', cdrController.read)

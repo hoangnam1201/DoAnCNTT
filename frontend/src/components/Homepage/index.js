@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom"
 import { GoPlus } from 'react-icons/go'
 import { AiOutlineUnorderedList } from "react-icons/ai"
-
-const { Card, Grid, CardActionArea, CardMedia, CardContent, Typography, CardHeader } = require("@material-ui/core")
+import { Card, CardActionArea, CardHeader, Grid } from "@material-ui/core"
 
 const Homepage = () => {
 

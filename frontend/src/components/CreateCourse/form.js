@@ -41,7 +41,7 @@ const ErrorText = styled.span`
     font-style:italic;
 `
 
-export const NewCourseForm = ({ props }) => (
+export const CreateCourseForm = ({ props }) => (
     <div>
         <FixedWidthForm id="create-form">
             <div className="form-group col-12 pb-2">
@@ -113,9 +113,9 @@ export const NewCourseForm = ({ props }) => (
                     <ErrorText>{props.errors.sotinchi}</ErrorText>
                 </div>
                 <div className="form-group col-12 col-lg-4 pb-2">
-                    <InputLabel
-                        className={`${props.errors.bomon && 'text-danger'}`}
-                    >Bộ môn</InputLabel>
+                    <InputLabel className={`${props.errors.bomon && 'text-danger'}`}>
+                        Bộ môn
+                    </InputLabel>
                     <Select
                         className={`bg-light form-control
                             ${props.errors.bomon ? ' border-danger' : ''}`}

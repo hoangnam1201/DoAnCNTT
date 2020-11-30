@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
 import coursesReducer from './courses.reducer'
-import coursesDetailReducer from './courseDetail.reducer'
+import coursesDetailsReducer from './courseDetails.reducer'
 
 const rootReducer = combineReducers({
     courses: coursesReducer,
-    course: coursesDetailReducer
+    course: coursesDetailsReducer
 })
 
 export default rootReducer

@@ -1,13 +1,13 @@
 import { Backdrop, Breadcrumbs, Button, Card, CardActions, CardContent, CardHeader, CircularProgress, Snackbar } from "@material-ui/core"
 import { useState } from "react"
-import useBreadcrumbs, { routeConfig } from "../../../hooks/useBreadcrumbs"
+import useBreadcrumbs, { routeConfig } from "../../hooks/useBreadcrumbs"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { Link, useHistory } from "react-router-dom"
-import { createCourse } from "../../../services"
-import { NewCourseForm } from "./form"
+import { createCourse } from "../../services"
+import { CreateCourseForm } from "./form"
 import { Alert, AlertTitle } from '@material-ui/lab'
 
-const NewCourse = () => {
+const CreateCourse = () => {
     const initialPostingState = {
         isPosting: false,
         response: {
@@ -142,7 +142,7 @@ const NewCourse = () => {
                 disableTypography
             />
             <CardContent className="border-bottom overflow-auto">
-                <NewCourseForm
+                <CreateCourseForm
                     props={{
                         mamh, setMamh, tenmh, setTenmh, sotinchi, setsotinchi,
                         phanloai, setPhanloai, mota, setMota, bomon, setBomon,
@@ -165,4 +165,4 @@ const NewCourse = () => {
     </>
 }
 
-export default NewCourse
+export default CreateCourse

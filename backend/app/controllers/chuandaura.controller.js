@@ -14,7 +14,11 @@ exports.read = function (req, res) {
             where: {
                 ma_monhoc: req.params.mamh
             }
-        }]
+        }],
+        order: [
+            ['id', 'ASC'],
+            [chuandaura, 'id', 'ASC']
+        ]
     })
         .then(data => {
             data = data.map(muctieu => ({

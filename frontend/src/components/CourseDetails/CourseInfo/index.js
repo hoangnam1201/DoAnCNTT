@@ -1,7 +1,10 @@
-import { Button, Divider, Input, Paper } from "@material-ui/core"
+import { Button, Divider, Paper } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import styled from "styled-components"
+import { updateCourse } from "../../../services"
+import { LoadingOverlay } from "../../StatelessComponents"
+import ContentRow from './contentRow'
 
 const Header = styled.h2`
     font-weight:700;
@@ -9,52 +12,55 @@ const Header = styled.h2`
     margin-bottom:0;
 `
 
-const Label = styled.label`
-    font-weight:700;
-    font-size:13px;
-    margin-bottom:0;
-    width:120px;
-    padding:0 15px;
-`
-
-const Content = styled.p`
-    white-space:pre-line;
-    word-wrap:break-word;
-    font-size:15px;
-    margin-bottom:0;
-`
 const ContentContainer = styled.div`
     min-width:500px;
 `
 
-const ContentRow = ({ label, content, edit, handle, value }) => (
-    <div className="row mb-3">
-        <Label className="section-title-color">
-            {label}:
-        </Label>
-        <Content className="col">
-            {!edit
-                ? content
-                : <Input
-                    disableUnderline
-                />}
-        </Content>
-    </div>
-)
+const boMonParser = {
+    "Tin học cơ sở": "thcs",
+    "Công nghệ phần mềm": "cnpm",
+    "Hệ thống thông tin": "httt",
+    "Mạng và an ninh mạng": "manm"
+}
 
-const CourseInfo = ({ course }) => {
+const CourseInfo = ({ course, fetch }) => {
     const [edit, setEdit] = useState(false)
+    const [update, setUpdate] = useState(false)
+    const [tenmh, setTenmh] = useState(course.tenmh)
+    const [sotinchi, setSotinchi] = useState(course.sotinchi)
+    const [bomon, setBomon] = useState(course.bomon)
+    const [phanloai, setPhanloai] = useState(course.phanloai)
+    const [mota, setMota] = useState(course.mota)
 
-    const handleEdit = () => {
-        setEdit(!edit)
+    const handleCloseEdit = () => {
+        setTenmh(course.tenmh)
+        setSotinchi(course.sotinchi)
+        setBomon(course.bomon)
+        setPhanloai(course.phanloai)
+        setMota(course.mota)
+        setEdit(false)
     }
 
-    const handleSubmitEdit = () => {
-
+    const handleSubmitEdit = async () => {
+        setUpdate(true)
+        updateCourse(course.mamh, {
+            tenmh, sotinchi, phanloai, mota,
+            mabomon: boMonParser[bomon]
+        })
+            .then(() => {
+                alert("Chỉnh sửa môn học thành công!")
+                window.location.reload()
+            })
+            .catch(err => {
+                alert(err)
+                console.log(err.response)
+                setUpdate(false)
+            })
     }
 
     return (
-        <Paper>
+        <Paper className="position-relative">
+            {update && <LoadingOverlay />}
             <div className="px-3 py-2 d-flex flex-wrap align-items-center justify-content-between">
                 <Header>
                     Tổng quan môn học
@@ -72,7 +78,7 @@ const CourseInfo = ({ course }) => {
                             </Button>
                             <Button
                                 className="text-transform-none ml-2"
-                                onClick={handleEdit}
+                                onClick={handleCloseEdit}
                                 variant="contained"
                             >
                                 Đóng
@@ -82,7 +88,7 @@ const CourseInfo = ({ course }) => {
                     : (
                         <Button
                             className="text-transform-none"
-                            onClick={handleEdit}
+                            onClick={() => setEdit(true)}
                         >
                             Chỉnh sửa&nbsp;<AiOutlineEdit size="17px" />
                         </Button>
@@ -93,34 +99,42 @@ const CourseInfo = ({ course }) => {
             <div style={{ overflowX: "auto" }}>
                 <ContentContainer className="px-5 pt-3 pb-2">
                     <ContentRow
-                        label="Tên môn học"
-                        content={course.tenmh}
-                        edit={edit}
-                    />
-                    <ContentRow
                         label="Mã môn học"
                         content={course.mamh}
+                    />
+                    <ContentRow
+                        label="Tên môn học"
+                        content={tenmh}
                         edit={edit}
+                        handle={setTenmh}
                     />
                     <ContentRow
                         label="Số tín chỉ"
-                        content={course.sotinchi}
+                        content={sotinchi}
                         edit={edit}
+                        handle={setSotinchi}
+                        number
                     />
                     <ContentRow
                         label="Bộ môn"
-                        content={course.bomon}
+                        content={bomon}
                         edit={edit}
+                        handle={setBomon}
+                        select
                     />
                     <ContentRow
                         label="Phân loại"
-                        content={course.phanloai}
+                        content={phanloai}
                         edit={edit}
+                        handle={setPhanloai}
+                        select
                     />
                     <ContentRow
                         label="Mô tả"
-                        content={course.mota}
+                        content={mota}
                         edit={edit}
+                        handle={setMota}
+                        multiline
                     />
                 </ContentContainer>
             </div>
