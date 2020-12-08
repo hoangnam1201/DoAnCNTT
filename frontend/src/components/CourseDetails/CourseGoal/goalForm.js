@@ -1,19 +1,21 @@
 import { Button, Drawer, Input } from "@material-ui/core";
 import styled from "styled-components";
+import { LoadingOverlay } from "../../StatelessComponents";
 
 const Label = styled.label`
     font-size:13px;
     font-weight:600;
 `
 
-const GoalForm = ({ header, open, setClose, handleSubmit, id, setId, desc, setDesc, outcome, setOutcome, loading }) => {
+const GoalForm = props => {
     return <Drawer
-        open={open}
+        open={props.open}
         anchor="right"
     >
         <div className="detail-form__wrapper">
+            {props.loading && <LoadingOverlay />}
             <header className="detail-form__header">
-                {header}
+                {props.header}
             </header>
             <div className="detail-form__main">
                 <div className="mt-2">
@@ -22,8 +24,9 @@ const GoalForm = ({ header, open, setClose, handleSubmit, id, setId, desc, setDe
                     </Label>
                     <Input
                         id="goal"
-                        value={id}
-                        onChange={e => setId(e.target.value)}
+                        disabled={props.edit}
+                        value={props.id}
+                        onChange={e => props.setId(e.target.value)}
                         fullWidth
                         disableUnderline
                         inputProps={{
@@ -40,8 +43,8 @@ const GoalForm = ({ header, open, setClose, handleSubmit, id, setId, desc, setDe
                     </Label>
                     <Input
                         id="outcome"
-                        value={outcome}
-                        onChange={e => setOutcome(e.target.value)}
+                        value={props.outcome}
+                        onChange={e => props.setOutcome(e.target.value)}
                         fullWidth
                         disableUnderline
                         inputProps={{ className: "grey-200-bg border p-2 rounded" }}
@@ -53,8 +56,8 @@ const GoalForm = ({ header, open, setClose, handleSubmit, id, setId, desc, setDe
                     </Label>
                     <Input
                         id="desc"
-                        value={desc}
-                        onChange={e => setDesc(e.target.value)}
+                        value={props.desc}
+                        onChange={e => props.setDesc(e.target.value)}
                         rows={10}
                         rowsMax={255}
                         inputProps={{ className: "grey-200-bg border p-2 rounded" }}
@@ -69,16 +72,16 @@ const GoalForm = ({ header, open, setClose, handleSubmit, id, setId, desc, setDe
                     className="text-transform-none light-blue-bgcolor"
                     color="primary"
                     variant="contained"
-                    onClick={handleSubmit}
-                    disabled={!id || !desc || !outcome}
+                    onClick={props.handleSubmit}
+                    disabled={!props.id || !props.desc || !props.outcome}
                 >
-                    Tạo mới
+                    {props.edit ? "Chỉnh sửa" : "Tạo mới"}
                 </Button>
                 <Button
                     className="text-transform-none ml-3"
                     color="secondary"
                     variant="outlined"
-                    onClick={setClose}
+                    onClick={props.setClose}
                 >
                     Đóng
                 </Button>

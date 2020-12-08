@@ -21,8 +21,10 @@ router.delete('/:mamh/muctieu/:muctieu', muctieuController.delete)
 
 /* Chuan dau ra */
 router.get('/:mamh/chuandaura', cdrController.read)
+router.get('/:mamh/chuandaura/list', cdrController.readList)
 router.post('/:mamh/chuandaura/:muctieu', cdrController.create)
 router.put('/:mamh/chuandaura/:muctieu/:cdr', cdrController.update)
+router.delete('/:mamh/chuandaura/:muctieu/:cdr', cdrController.delete)
 
 /* Danh gia */
 router.get('/:mamh/danhgia', danhgiaController.read)

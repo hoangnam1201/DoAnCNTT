@@ -11,6 +11,35 @@ const theme = createMuiTheme({
   typography: {
     fontFamily: `"Open Sans", sans-serif, "Roboto", 'Lato'`,
     fontSize: "14px",
+  },
+  overrides: {
+    MuiTableCell: {
+      body: {
+        fontSize: 14,
+        padding: "10px",
+        lineHeight: "24px"
+      }
+    },
+    MuiInputBase: {
+      root: {
+        fontSize: 14,
+        lineHeight: "24px"
+      },
+      input: {
+        fontSize: 14,
+        lineHeight: "24px"
+      }
+    },
+    MuiTableRow: {
+      root: {
+        position: "relative"
+      },
+      hover: {
+        '&:hover .action-button': {
+          visibility: "visible"
+        }
+      }
+    }
   }
 })
 

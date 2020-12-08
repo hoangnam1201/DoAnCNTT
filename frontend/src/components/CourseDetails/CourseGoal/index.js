@@ -1,5 +1,5 @@
 import { Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { Alert } from "@material-ui/lab"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { createCourseGoal } from "../../../services"
@@ -10,19 +10,12 @@ import GoalForm from './goalForm'
 import Row from './row'
 
 const CourseGoal = ({ mamh }) => {
-    const initialState = {
-        loading: false,
-        response: {
-            status: "",
-            message: ""
-        }
-    }
-
     const [create, setCreate] = useState(false)
     const [ID, setID] = useState('')
     const [desc, setDesc] = useState('')
     const [outcome, setOutcome] = useState('')
-    const [creating, setCreating] = useState(initialState)
+    const [loading, setLoading] = useState(false)
+    const [response, setResponse] = useState('')
 
     const goals = useSelector(state => state.course[mamh].goal)
     const data = useSelector(state => state.course[mamh].goal.data)
@@ -40,7 +33,7 @@ const CourseGoal = ({ mamh }) => {
     }
 
     const handleSubmitCreate = () => {
-        setCreating({ ...creating, loading: true })
+        setLoading(true)
         createCourseGoal(mamh, {
             muctieu: ID,
             mota: desc,
@@ -48,22 +41,17 @@ const CourseGoal = ({ mamh }) => {
         }).then(() => {
             fetch()
             setCreate(false)
-            setCreating({
-                loading: false,
-                response: {
-                    status: "success",
-                    message: "Tạo mục tiêu thành công!"
-                }
+            setLoading(false)
+            setResponse({
+                status: "success",
+                message: `Tạo môn học thành công!`
             })
         })
             .catch(err => {
-                setCreating({
-                    loading: false,
-                    response: {
-                        status: "error",
-                        message: !err.response ? "Lỗi máy chủ" :
-                            err.response.data.error
-                    }
+                setLoading(false)
+                setResponse({
+                    status: "error",
+                    message: `Tạo môn học thành công!`
                 })
             })
     }
@@ -75,19 +63,17 @@ const CourseGoal = ({ mamh }) => {
 
     return <>
         <Snackbar
-            open={creating.response.status}
-            onClose={() => setCreating(initialState)}
+            open={response.status}
+            onClose={() => setResponse('')}
         >
             <Alert
-                onClose={() => setCreating(initialState)}
-                severity={creating.response.status}
+                onClose={() => setResponse('')}
+                severity={response.status}
                 className="mx-3 mb-3"
                 style={{ minWidth: "250px" }}
+                variant="filled"
             >
-                <AlertTitle className="text-capitalize font-weight-bold">
-                    {creating.response.status}
-                </AlertTitle>
-                {creating.response.message}
+                {response.message}
             </Alert>
         </Snackbar>
         <GoalForm
@@ -100,7 +86,7 @@ const CourseGoal = ({ mamh }) => {
             setId={setID}
             setDesc={setDesc}
             setOutcome={setOutcome}
-            loading={creating.loading}
+            loading={loading}
             handleSubmit={handleSubmitCreate}
         />
         <TableContainer className="p-2" component={Paper}>
@@ -135,7 +121,7 @@ const CourseGoal = ({ mamh }) => {
                                 ? <ErrorRow refresh={fetch} />
                                 : goals.data && data.length !== 0
                                     ? data.map(row => (
-                                        <Row row={row} mamh={mamh} key={row.muctieu} />
+                                        <Row setResponse={setResponse} row={row} mamh={mamh} key={row.muctieu} />
                                     ))
                                     : <EmptyRow
                                         error="Chưa có mục tiêu"

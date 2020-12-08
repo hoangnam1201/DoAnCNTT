@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseURL = "http://localhost:3001/api";
 
-const http = axios.create({ baseURL, timeout: 7500 });
+const http = axios.create({ baseURL });
 
 //Tao mon hoc
 export const createCourse = data => {
@@ -62,4 +62,8 @@ export const createCourseOutcome = (mamh, muctieu, data) => {
 
 export const updateCourseOutcome = (mamh, muctieu, outcome, data) => {
     return http.put(`/monhoc/${mamh}/chuandaura/${muctieu}/${outcome}`, data)
+}
+
+export const deleteCourseOutcome = (mamh, muctieu, cdr) => {
+    return http.delete(`/monhoc/${mamh}/chuandaura/${muctieu}/${cdr}`)
 }

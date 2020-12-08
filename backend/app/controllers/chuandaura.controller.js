@@ -34,6 +34,22 @@ exports.read = function (req, res) {
         .catch(err => res.status(400).send(err))
 }
 
+exports.readList = function (req, res) {
+    chuandaura.findAll({
+        where: {
+            ma_monhoc: req.params.mamh
+        },
+        order: [
+            ['id', 'ASC']
+        ]
+    })
+        .then(data => {
+            data = data.map(cdr => cdr.id)
+            return res.status(200).send(data)
+        })
+        .catch(err => res.status(400).send(err))
+}
+
 /* Them chuan dau ra */
 exports.create = function (req, res) {
     chuandaura.create({
@@ -60,6 +76,19 @@ exports.update = function (req, res) {
             id: req.params.cdr,
             ma_monhoc: req.params.mamh,
             ma_muctieu: req.params.muctieu
+        }
+    })
+        .then(() => res.sendStatus(200))
+        .catch(err => res.status(500).send(err))
+}
+
+//Xoa
+exports.delete = function (req, res) {
+    chuandaura.destroy({
+        where: {
+            id: req.params.cdr,
+            ma_monhoc: req.params.mamh,
+            ma_muctieu: req.params.muctieu  
         }
     })
         .then(() => res.sendStatus(200))

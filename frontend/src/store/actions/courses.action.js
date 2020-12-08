@@ -22,7 +22,12 @@ export const fetchCourses = () => {
         dispatch(fetchCoursesPending())
         getCourses()
             .then(data => {
-                dispatch(fetchCoursesSuccess(data))
+                if (Array.isArray(data)) {
+                    dispatch(fetchCoursesSuccess(data))
+                }
+                else {
+                    throw data
+                }
             })
             .catch(err => {
                 dispatch(fetchCoursesFail(err))

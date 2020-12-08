@@ -3,14 +3,11 @@ import { Alert, AlertTitle } from "@material-ui/lab"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsTrash } from "react-icons/bs"
-import { useDispatch } from "react-redux"
-import { deleteCourseGoal, updateCourseOutcome } from "../../../services"
-import { deleteGoalSuccess, updateGoalSuccess } from "../../../store/actions/courseGoal.action"
+import { deleteCourseOutcome, updateCourseOutcome } from "../../../services"
 import { LoadingCellOverlay } from "../../StatelessComponents"
 import OutcomeForm from "./outcomeForm"
 
-const Row = ({ data, mamh, muctieu }) => {
-    console.log(data)
+const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
     const [loading, setLoading] = useState(false)
     const [flag, setFlag] = useState('')
     const [goal, setGoal] = useState(muctieu)
@@ -18,22 +15,28 @@ const Row = ({ data, mamh, muctieu }) => {
     const [desc, setDesc] = useState(data.mota)
     const [cdio, setCdio] = useState(data.cdio)
 
-    const dispatch = useDispatch()
-
     const handleSubmitDelete = async () => {
-        setLoading(true)
+        setLoading('ROW')
         setFlag('')
-        deleteCourseGoal(mamh, data.muctieu)
+        deleteCourseOutcome(mamh, muctieu, data.cdr)
             .then(() => {
-                dispatch(deleteGoalSuccess(mamh, data.muctieu))
+                fetch()
+                setResponse({
+                    status: "success",
+                    message: "Xóa môn học thành công"
+                })
             })
             .catch(err => {
                 setLoading(false)
+                setResponse({
+                    status: "error",
+                    message: "Xóa môn học thất bại"
+                })
             })
     }
 
     const handleSubmitEdit = async () => {
-        setLoading(true)
+        setLoading('FORM')
         const updateData = {
             cdr: id,
             ma_muctieu: goal,
@@ -42,19 +45,18 @@ const Row = ({ data, mamh, muctieu }) => {
         }
         updateCourseOutcome(mamh, muctieu, data.cdr, updateData)
             .then(() => {
-                dispatch(updateGoalSuccess(mamh, data.muctieu, updateData))
                 setLoading(false)
-                setFlag({
+                setResponse({
                     status: "success",
-                    message: `Chỉnh sửa mục tiêu ${goal} thành công!`
+                    message: "Chỉnh sửa môn học thành công!"
                 })
+                fetch()
             })
             .catch(err => {
-                console.log(err.response)
                 setLoading(false)
-                setFlag({
+                setResponse({
                     status: "error",
-                    message: `Chỉnh sửa mục tiêu ${goal} thất bại!`
+                    message: `Chỉnh sửa môn học thất bại ${err.response && err.response.message}`
                 })
             })
     }
@@ -65,24 +67,10 @@ const Row = ({ data, mamh, muctieu }) => {
 
     return (
         <>
-            <Snackbar
-                open={flag.status}
-                onClose={() => setFlag('')}
-            >
-                <Alert
-                    onClose={() => setFlag('')}
-                    severity={flag.status}
-                    className="mx-3 mb-3"
-                    style={{ minWidth: "250px" }}
-                >
-                    <AlertTitle className="text-capitalize font-weight-bold">
-                        {flag.status}
-                    </AlertTitle>
-                    {flag.message}
-                </Alert>
-            </Snackbar>
             <OutcomeForm
-                header={`Chỉnh sửa CĐR ${data.id}`}
+                edit
+                header={`Chỉnh sửa CĐR ${data.cdr}`}
+                loading={loading === 'FORM'}
                 open={flag === "EDIT"}
                 setClose={() => setFlag("")}
                 mamh={mamh}
@@ -126,30 +114,32 @@ const Row = ({ data, mamh, muctieu }) => {
                 </Card>
             </Dialog>
             <>
-                <TableCell align="center" style={{ verticalAlign: 'top' }} >
+                <TableCell align="center">
                     {data.cdr}
                 </TableCell>
-                <TableCell className="break-line" style={{ verticalAlign: 'top' }} >
+                <TableCell className="break-line" >
                     {data.mota}
                 </TableCell>
-                <TableCell align="center" style={{ verticalAlign: 'top' }} >
+                <TableCell align="center" >
                     {data.cdio}
                 </TableCell>
-                <TableCell align='center' style={{ verticalAlign: 'top' }} className="px-0">
-                    <IconButton
-                        className="text-primary p-2"
-                        onClick={() => setFlag("EDIT")}
-                    >
-                        <AiOutlineEdit size="24px" />
-                    </IconButton>
-                    <IconButton
-                        className="text-danger p-2"
-                        onClick={handleToggleDelete}
-                    >
-                        <BsTrash size="24px" />
-                    </IconButton>
+                <TableCell align='center' className="px-0">
+                    <div className="action-button">
+                        <IconButton
+                            className="text-primary p-2"
+                            onClick={() => setFlag("EDIT")}
+                        >
+                            <AiOutlineEdit size="24px" />
+                        </IconButton>
+                        <IconButton
+                            className="text-danger p-2"
+                            onClick={handleToggleDelete}
+                        >
+                            <BsTrash size="24px" />
+                        </IconButton>
+                    </div>
                 </TableCell>
-                {loading && <LoadingCellOverlay />}
+                {loading === 'ROW' && <LoadingCellOverlay />}
             </>
         </>
     )

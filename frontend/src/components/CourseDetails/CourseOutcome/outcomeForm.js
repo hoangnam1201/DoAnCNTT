@@ -13,18 +13,20 @@ const OutcomeForm = (props) => {
     const [loading, setLoading] = useState(false)
     const [goals, setGoals] = useState(null)
     useEffect(() => {
-        setLoading(true)
-        getCourseGoalList(props.mamh)
-            .then(data => {
-                setLoading(false)
-                setGoals(data)
-                console.log(data)
-                props.setGoal(data[0])
-            })
-            .catch(
-                props.setClose()
-            )
-    }, [])
+        if (props.open) {
+            setLoading(true)
+            getCourseGoalList(props.mamh)
+                .then(data => {
+                    props.setGoal(data[0])
+                    setLoading(false)
+                    setGoals(data)
+                })
+                .catch(err => {
+                    alert(err)
+                    props.setClose()
+                })
+        }
+    }, [props.open])
 
     return <Drawer
         open={props.open}
@@ -35,6 +37,7 @@ const OutcomeForm = (props) => {
                 (loading || !goals)
                     ? <LoadingOverlay />
                     : <>
+                        {props.loading && <LoadingOverlay />}
                         <header className="detail-form__header">
                             {props.header}
                         </header>
@@ -44,6 +47,7 @@ const OutcomeForm = (props) => {
                                     Mục tiêu
                                 </Label>
                                 <select
+                                    disabled={props.edit}
                                     className="form-control border grey-200-bg"
                                     value={props.goal}
                                     onChange={e => props.setGoal(e.target.value)}
@@ -106,7 +110,7 @@ const OutcomeForm = (props) => {
                                 onClick={props.handleSubmit}
                                 disabled={!props.id || !props.desc || !props.cdio}
                             >
-                                Tạo mới
+                                {props.edit ? "Chỉnh sửa" : "Tạo mới"}
                             </Button>
                             <Button
                                 className="text-transform-none ml-3"

@@ -1,4 +1,5 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
+import { Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
+import { Alert, AlertTitle } from "@material-ui/lab"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { createCourseOutcome } from "../../../services"
@@ -9,24 +10,16 @@ import OutcomeForm from "./outcomeForm"
 import Row from "./row"
 
 const CourseOutcome = ({ mamh }) => {
-    const initialState = {
-        loading: false,
-        response: {
-            status: "",
-            message: ""
-        }
-    }
-
     const [create, setCreate] = useState(false)
     const [ID, setID] = useState('')
     const [goal, setGoal] = useState('')
     const [desc, setDesc] = useState('')
     const [cdio, setCdio] = useState('')
-    const [creating, setCreating] = useState(initialState)
+    const [loading, setLoading] = useState(false)
+    const [response, setResponse] = useState('')
 
     const outcomes = useSelector(state => state.course[mamh].outcome)
     const data = useSelector(state => state.course[mamh].outcome.data)
-    console.log(outcomes)
     const dispatch = useDispatch()
 
     const fetch = () => {
@@ -42,30 +35,28 @@ const CourseOutcome = ({ mamh }) => {
     }
 
     const handleSubmitCreate = () => {
-        setCreating({ ...creating, loading: true })
+        setLoading(true)
         createCourseOutcome(mamh, goal, {
             cdr: ID,
             mota: desc,
             cdio
-        }).then(() => {
-            fetch()
-            setCreate(false)
-            setCreating({
-                loading: false,
-                response: {
-                    status: "success",
-                    message: "Tạo mục tiêu thành công!"
-                }
-            })
         })
+            .then(() => {
+                fetch()
+                setCreate(false)
+                setLoading(false)
+                setResponse({
+                    status: "success",
+                    message: `Tạo môn học thành công!`
+                })
+            })
             .catch(err => {
-                setCreating({
-                    loading: false,
-                    response: {
-                        status: "error",
-                        message: !err.response ? "Lỗi máy chủ" :
-                            err.response.data.error
-                    }
+                setLoading(false)
+                setResponse({
+                    status: "error",
+                    message: `${!err.response
+                        ? "Lỗi máy chủ"
+                        : err.response.message}`
                 })
             })
     }
@@ -76,6 +67,20 @@ const CourseOutcome = ({ mamh }) => {
     }, [dispatch, mamh, outcomes.data])
 
     return <>
+        <Snackbar
+            open={response}
+            onClose={() => setResponse('')}
+        >
+            <Alert
+                onClose={() => setResponse('')}
+                severity={response.status}
+                className="mx-3 mb-3"
+                style={{ minWidth: "250px" }}
+                variant="filled"
+            >
+                {response.message}
+            </Alert>
+        </Snackbar>
         <OutcomeForm
             header="Tạo chuẩn đầu ra"
             open={create}
@@ -90,6 +95,7 @@ const CourseOutcome = ({ mamh }) => {
             setCdio={setCdio}
             setDesc={setDesc}
             handleSubmit={handleSubmitCreate}
+            loading={loading}
         />
         <TableContainer className="p-2" component={Paper}>
             <CreateNew
@@ -123,13 +129,13 @@ const CourseOutcome = ({ mamh }) => {
                 <TableBody>
                     {
                         outcomes.pending
-                            ? <LoadingRows col={4} />
+                            ? <LoadingRows col={5} />
                             : outcomes.error
                                 ? <ErrorRow refresh={fetch} />
                                 : outcomes.data && data.length !== 0
                                     ? data.map(data => (
                                         <>
-                                            <TableRow style={{ transform: "scale(1)" }}>
+                                            <TableRow hover style={{ transform: "scale(1)" }}>
                                                 <TableCell
                                                     align="center"
                                                     rowSpan={data.chuandaura.length}
@@ -138,12 +144,12 @@ const CourseOutcome = ({ mamh }) => {
                                                 >
                                                     {data.muctieu}
                                                 </TableCell>
-                                                <Row muctieu={data.muctieu} data={data.chuandaura[0]} mamh={mamh} key={data.chuandaura[0].cdr} />
+                                                <Row setResponse={setResponse} fetch={fetch} muctieu={data.muctieu} data={data.chuandaura[0]} mamh={mamh} key={data.chuandaura[0].cdr} />
                                             </TableRow>
                                             {data.chuandaura.map((cdrData, index) => (
                                                 index !== 0 &&
-                                                <TableRow style={{ transform: "scale(1)" }}>
-                                                    <Row muctieu={data.muctieu} data={cdrData} mamh={mamh} key={cdrData.cdr} />
+                                                <TableRow hover style={{ transform: "scale(1)" }}>
+                                                    <Row setResponse={setResponse} fetch={fetch} muctieu={data.muctieu} data={cdrData} mamh={mamh} key={cdrData.cdr} />
                                                 </TableRow>
                                             ))}
                                         </>
