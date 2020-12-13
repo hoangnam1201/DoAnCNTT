@@ -1,4 +1,4 @@
-import { Button, Input, InputAdornment, Popover, Tooltip } from '@material-ui/core'
+import { Button, IconButton, Input, InputAdornment, Popover, Tooltip } from '@material-ui/core'
 import { useState } from 'react'
 import { BiFilter, BiSearch } from 'react-icons/bi'
 import { IoMdRefresh } from 'react-icons/io'
@@ -40,7 +40,7 @@ const FilterBar = (props) => {
     }
     return <div
         style={{ minWidth: "920px" }}
-        className="d-flex pl-2 pb-2 justify-content-between align-items-center"
+        className="d-flex pl-2 justify-content-between align-items-center"
     >
         <div className="d-flex align-items-center">
             <Input
@@ -114,7 +114,6 @@ const FilterBar = (props) => {
                         <Button
                             variant="contained"
                             color="primary"
-                            className="text-transform-none font-weight-bold"
                             onClick={() => {
                                 setFilter({
                                     ...filter,
@@ -128,7 +127,7 @@ const FilterBar = (props) => {
                             Áp dụng
                         </Button>
                         <Button
-                            className="text-transform-none ml-2 text-danger font-weight-bold"
+                            className="ml-2 text-danger"
                             onClick={() => {
                                 setFilter(initialFilter)
                                 setAnchorEl(null)
@@ -140,7 +139,7 @@ const FilterBar = (props) => {
                             Phục hồi
                         </Button>
                         <Button onClick={() => setAnchorEl(null)}
-                            className="text-transform-none ml-2 font-weight-bold">
+                            className="ml-2">
                             Đóng
                         </Button>
                     </div>
@@ -149,15 +148,15 @@ const FilterBar = (props) => {
         </div>
         <div>
             <Button variant="contained" color="primary"
-                className="light-blue-bgcolor my-2 font-weight-bold">
+                className="light-blue-bgcolor my-2">
                 <Link color="inherit" className="link-unstyled" to="/course/create">
                     Tạo môn học
             </Link>
             </Button>
             <Tooltip title="Tải lại">
-                <Button onClick={props.refresh} className="p-0 mx-2">
+                <IconButton onClick={props.refresh} className="p-2 mx-2">
                     <IoMdRefresh size="25px" />
-                </Button>
+                </IconButton>
             </Tooltip>
         </div>
     </div>

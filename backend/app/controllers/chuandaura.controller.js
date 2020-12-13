@@ -44,7 +44,10 @@ exports.readList = function (req, res) {
         ]
     })
         .then(data => {
-            data = data.map(cdr => cdr.id)
+            data = data.map(cdr => ({
+                cdr: cdr.id,
+                muctieu: cdr.ma_muctieu
+            }))
             return res.status(200).send(data)
         })
         .catch(err => res.status(400).send(err))
@@ -88,7 +91,7 @@ exports.delete = function (req, res) {
         where: {
             id: req.params.cdr,
             ma_monhoc: req.params.mamh,
-            ma_muctieu: req.params.muctieu  
+            ma_muctieu: req.params.muctieu
         }
     })
         .then(() => res.sendStatus(200))

@@ -1,10 +1,11 @@
-import { Card, CardActions, CardContent, CardHeader, Dialog, IconButton, Snackbar, TableCell } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { IconButton, TableCell } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsTrash } from "react-icons/bs"
-import { deleteCourseOutcome, updateCourseOutcome } from "../../../services"
-import { LoadingCellOverlay } from "../../StatelessComponents"
+import { deleteCourseOutcome, updateCourseOutcome } from "../../../api/CourseAPI"
+import { ErrorHelper } from "../../../utils"
+import ConfirmDeleteForm from "../../common/ConfirmDeleteForm"
+import { LoadingOverlayCell } from "../../common/LoadingOverlay"
 import OutcomeForm from "./outcomeForm"
 
 const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
@@ -56,7 +57,7 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: `Chỉnh sửa môn học thất bại ${err.response && err.response.message}`
+                    message: `Chỉnh sửa môn học thất bại ${ErrorHelper(err)}`
                 })
             })
     }
@@ -84,35 +85,14 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                 setDesc={setDesc}
                 handleSubmit={handleSubmitEdit}
             />
-            <Dialog open={(flag === 'ConfirmDelete')} onClose={() => setFlag('')}>
-                <Card className="p-3">
-                    <CardHeader
-                        disableTypography
-                        title={`Xóa mục tiêu`}
-                        className="page-title primary-logo-color"
-                    />
-                    <CardContent>
-                        Xác nhận xóa mục tiêu {data.muctieu}
-                        <span className="font-weight-bold font-italic">
-                            {data.tenmh}
-                        </span>.
-                    </CardContent>
-                    <CardActions>
-                        <button
-                            onClick={handleSubmitDelete}
-                            className="btn btn-block btn-danger"
-                        >
-                            Xóa
-                    </button>
-                        <button
-                            onClick={() => setFlag('')}
-                            className="btn btn-block btn-light"
-                        >
-                            Hủy
-                    </button>
-                    </CardActions>
-                </Card>
-            </Dialog>
+            <ConfirmDeleteForm
+                open={(flag === 'ConfirmDelete')}
+                onClose={() => setFlag('')}
+                onSubmit={handleSubmitDelete}
+                label="Chuẩn đầu ra"
+                warning="Xóa chuẩn đầu ra vĩnh viễn. Không thể khôi phục."
+                name={data.cdr}
+            />
             <>
                 <TableCell align="center">
                     {data.cdr}
@@ -139,7 +119,7 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                         </IconButton>
                     </div>
                 </TableCell>
-                {loading === 'ROW' && <LoadingCellOverlay />}
+                {loading === 'ROW' && <LoadingOverlayCell />}
             </>
         </>
     )

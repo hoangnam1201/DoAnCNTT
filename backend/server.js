@@ -1,18 +1,28 @@
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 var cors = require("cors");
 const express = require('express')
 const app = express()
 const appRoute = require('./app/routes')
 const path = require('path')
 
-app.use(cors())
-app.use(bodyParser.json())
+const corsOption = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  methods: ['POST', 'PUT', 'OPTIONS', 'DELETE', 'GET'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+}
 
+app.options('*', cors(corsOption))
+app.use(cors(corsOption))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 //Route
 app.use('/api', appRoute)
 
-app.use(express.static(path.join(__dirname, 'build')));
+
 
 
 app.get('/*', (req, res) => {

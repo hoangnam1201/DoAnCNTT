@@ -1,12 +1,13 @@
-import { Card, CardActions, CardContent, CardHeader, Dialog, IconButton, Snackbar, TableCell, TableRow } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { IconButton, TableCell, TableRow } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsTrash } from "react-icons/bs"
 import { useDispatch } from "react-redux"
-import { deleteCourseGoal, updateCourseGoal } from "../../../services"
+import { deleteCourseGoal, updateCourseGoal } from "../../../api/CourseAPI"
 import { deleteGoalSuccess, updateGoalSuccess } from "../../../store/actions/courseGoal.action"
-import { LoadingCellOverlay } from "../../StatelessComponents"
+import { ErrorHelper } from "../../../utils"
+import ConfirmDeleteForm from "../../common/ConfirmDeleteForm"
+import { LoadingOverlayCell } from "../../common/LoadingOverlay"
 import GoalForm from "./goalForm"
 
 const Row = ({ row, mamh, setResponse }) => {
@@ -26,14 +27,14 @@ const Row = ({ row, mamh, setResponse }) => {
                 dispatch(deleteGoalSuccess(mamh, row.muctieu))
                 setResponse({
                     status: "success",
-                    message: "asdad"
+                    message: "Xóa mục tiêu thành công!"
                 })
             })
             .catch(err => {
                 setLoading('')
                 setResponse({
                     status: "error",
-                    message: "asdad"
+                    message: ErrorHelper(err)
                 })
             })
     }
@@ -59,7 +60,7 @@ const Row = ({ row, mamh, setResponse }) => {
                 setLoading('')
                 setResponse({
                     status: "error",
-                    message: `Chỉnh sửa mục tiêu ${goal} thất bại!`
+                    message: `Chỉnh sửa mục tiêu ${goal} thất bại! ${ErrorHelper(err)}`
                 })
             })
     }
@@ -84,35 +85,14 @@ const Row = ({ row, mamh, setResponse }) => {
                 loading={loading === 'FORM'}
                 handleSubmit={handleSubmitEdit}
             />
-            <Dialog open={(flag === 'ConfirmDelete')} onClose={() => setFlag('')}>
-                <Card className="p-3">
-                    <CardHeader
-                        disableTypography
-                        title={`Xóa mục tiêu`}
-                        className="page-title primary-logo-color"
-                    />
-                    <CardContent>
-                        Xác nhận xóa mục tiêu {row.muctieu}
-                        <span className="font-weight-bold font-italic">
-                            {row.tenmh}
-                        </span>.
-                    </CardContent>
-                    <CardActions>
-                        <button
-                            onClick={handleSubmitDelete}
-                            className="btn btn-block btn-danger"
-                        >
-                            Xóa
-                    </button>
-                        <button
-                            onClick={() => setFlag('')}
-                            className="btn btn-block btn-light"
-                        >
-                            Hủy
-                    </button>
-                    </CardActions>
-                </Card>
-            </Dialog>
+            <ConfirmDeleteForm
+                open={(flag === 'ConfirmDelete')}
+                onClose={() => setFlag('')}
+                onSubmit={handleSubmitDelete}
+                label="Mục tiêu"
+                warning="Xóa mục tiêu vĩnh viễn. Không thể khôi phục."
+                name={row.muctieu}
+            />
             <TableRow hover style={{ transform: "scale(1)" }}>
                 <TableCell align="center" >
                     {row.muctieu}
@@ -139,7 +119,7 @@ const Row = ({ row, mamh, setResponse }) => {
                         </IconButton>
                     </div>
                 </TableCell>
-                {loading === 'ROW' && <LoadingCellOverlay />}
+                {loading === 'ROW' && <LoadingOverlayCell />}
             </TableRow>
         </>
     )

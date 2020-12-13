@@ -7,9 +7,7 @@ body,
 body {
   margin: 0;
   font-family: "Open Sans", sans-serif, "Roboto", 'Lato' !important;
-  overflow-y: scroll;
 }
-
 
 button:focus,
 .btn.active.focus,
@@ -48,10 +46,6 @@ hr {
   border-radius: 15px;
 }
 
-.text-transform-none {
-  text-transform: none !important;
-}
-
 .flex-center {
   display: flex !important;
   justify-content: center !important;
@@ -60,4 +54,8 @@ hr {
 
 .overlay{
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.font-weight-bold{
+  font-weight: 600 !important;
 }

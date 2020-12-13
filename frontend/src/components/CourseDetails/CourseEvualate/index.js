@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
-import { LoadingRows } from "../../SituationRow"
+import LoadingRows from "../../common/LoadingRows"
 
 const CourseEvualate = () => {
     return <TableContainer className="p-2" component={Paper}>

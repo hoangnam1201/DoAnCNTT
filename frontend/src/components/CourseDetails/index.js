@@ -11,7 +11,8 @@ import CourseGoal from "./CourseGoal"
 import CourseOutcome from "./CourseOutcome"
 import CourseEvualate from "./CourseEvualate"
 import CourseContent from "./CourseContent"
-import { ErrorPage, LoadingPage } from "../StatelessComponents"
+import LoadingPage from "../common/LoadingPage"
+import ErrorPage from "../common/ErrorPage"
 
 const useStyles = makeStyles({
     tabRoot: {
@@ -79,7 +80,7 @@ const CourseDetails = () => {
                 </h3>
                 <Button
                     size="small"
-                    className="text-transform-none p-0 mr-2 "
+                    className="p-0 mr-2 "
                     onClick={() => history.push('/course')}
                 >
                     <MdKeyboardArrowLeft size="1.2rem" />

@@ -2,12 +2,15 @@ import { Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead
 import { Alert } from "@material-ui/lab"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { createCourseGoal } from "../../../services"
+import { createCourseGoal } from "../../../api/CourseAPI"
 import { fetchGoal } from "../../../store/actions/courseGoal.action"
-import { EmptyRow, ErrorRow, LoadingRows } from "../../SituationRow"
 import CreateNew from "../CreateNew"
 import GoalForm from './goalForm'
 import Row from './row'
+import EmptyRow from "../../common/EmptyRow"
+import ErrorRow from "../../common/ErrorRow"
+import LoadingRows from "../../common/LoadingRows"
+import { ErrorHelper } from "../../../utils"
 
 const CourseGoal = ({ mamh }) => {
     const [create, setCreate] = useState(false)
@@ -51,7 +54,7 @@ const CourseGoal = ({ mamh }) => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: `Tạo môn học thành công!`
+                    message: ErrorHelper(err)
                 })
             })
     }
@@ -71,7 +74,6 @@ const CourseGoal = ({ mamh }) => {
                 severity={response.status}
                 className="mx-3 mb-3"
                 style={{ minWidth: "250px" }}
-                variant="filled"
             >
                 {response.message}
             </Alert>
@@ -89,7 +91,7 @@ const CourseGoal = ({ mamh }) => {
             loading={loading}
             handleSubmit={handleSubmitCreate}
         />
-        <TableContainer className="p-2" component={Paper}>
+        <TableContainer className="light-grey-bg" component={Paper}>
             <CreateNew
                 fetch={fetch}
                 setOpen={setCreate}
@@ -100,20 +102,20 @@ const CourseGoal = ({ mamh }) => {
             <Table style={{ minWidth: "750px" }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell width="120px" align="center" size="small">
+                        <TableCell width="120px" align="center">
                             Mục tiêu
                         </TableCell>
-                        <TableCell align="center" size="small">
+                        <TableCell align="center">
                             Mô tả
                         </TableCell>
-                        <TableCell width="150px" align="center" size="small">
+                        <TableCell width="170px" align="center">
                             Chuẩn đầu ra CTĐT
                         </TableCell>
-                        <TableCell width="150px" className="px-0" align="center" size="small">
+                        <TableCell width="120px" className="px-0" align="center">
                         </TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className="bg-white">
                     {
                         goals.pending
                             ? <LoadingRows col={4} />
@@ -124,8 +126,8 @@ const CourseGoal = ({ mamh }) => {
                                         <Row setResponse={setResponse} row={row} mamh={mamh} key={row.muctieu} />
                                     ))
                                     : <EmptyRow
-                                        error="Chưa có mục tiêu"
-                                        subError={(<>
+                                        header="Chưa có mục tiêu"
+                                        text={(<>
                                             Vui lòng&nbsp;
                                         <span onClick={() => setCreate(true)} style={{ cursor: "pointer" }} class="btn-link">
                                                 tạo mới!

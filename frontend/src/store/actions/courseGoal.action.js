@@ -6,7 +6,8 @@ import {
     UPDATE_COURSE_GOAL_SUCCESS
 }
     from '../constants/ActionTypes'
-import { getCourseGoal } from '../../services'
+import { getCourseGoal } from '../../api/CourseAPI'
+import { ErrorHelper } from '../../utils'
 
 const fetchGoalPending = mamh => ({
     type: FETCH_COURSE_GOAL_PENDING,
@@ -51,7 +52,7 @@ export const fetchGoal = mamh => {
                 dispatch(fetchGoalSuccess(mamh, data))
             })
             .catch(err => {
-                dispatch(fetchGoalFail(mamh, err.message))
+                dispatch(fetchGoalFail(mamh, ErrorHelper(err)))
             })
     }
 }

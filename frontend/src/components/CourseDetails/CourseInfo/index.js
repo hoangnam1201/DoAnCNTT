@@ -1,8 +1,9 @@
-import { Button, Divider, Paper } from "@material-ui/core"
+import { Divider, IconButton, Paper } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import styled from "styled-components"
-import { updateCourse } from "../../../services"
+import { updateCourse } from "../../../api/CourseAPI"
+import { ErrorHelper } from "../../../utils"
 import ContentRow from './contentRow'
 import EditForm from "./editForm"
 
@@ -52,13 +53,13 @@ const CourseInfo = ({ course }) => {
                 window.location.reload()
             })
             .catch(err => {
-                alert(err)
+                alert(ErrorHelper(err))
                 setLoading(false)
             })
     }
 
     return (
-        <Paper className="position-relative">
+        <Paper elevation={3} className="position-relative">
             <EditForm
                 header="Chỉnh sửa môn học"
                 buttonLabel="Chỉnh sửa"
@@ -78,13 +79,13 @@ const CourseInfo = ({ course }) => {
                 setPhanloai={setPhanloai}
                 setMota={setMota}
             />
-            <div className="px-3 py-2 d-flex flex-wrap align-items-center justify-content-between">
+            <div className="px-3 light-grey-bg py-2 d-flex flex-wrap align-items-center justify-content-between">
                 <Header>
                     Tổng quan môn học
                 </Header>
-                <Button onClick={handleToggleEdit}>
+                <IconButton onClick={handleToggleEdit}>
                     <AiOutlineEdit size="17px" />
-                </Button>
+                </IconButton>
             </div>
             <Divider />
             <div style={{ overflowX: "auto" }}>

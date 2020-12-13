@@ -4,7 +4,8 @@ import {
     FETCH_COURSE_FAIL
 }
     from '../constants/ActionTypes'
-import { getCourseInfo } from '../../services'
+import { getCourseInfo } from '../../api/CourseAPI'
+import { ErrorHelper } from '../../utils'
 
 const fetchCoursePending = mamh => ({
     type: FETCH_COURSE_PENDING,
@@ -30,7 +31,7 @@ export const fetchCourse = mamh => {
                 dispatch(fetchCourseSuccess(data))
             })
             .catch(err => {
-                dispatch(fetchCourseFail(mamh, err.message))
+                dispatch(fetchCourseFail(mamh, ErrorHelper(err)))
             })
     }
 }

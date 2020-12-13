@@ -6,7 +6,8 @@ import {
     UPDATE_COURSE_OUTCOME_SUCCESS
 }
     from '../constants/ActionTypes'
-import { getCourseOutcome } from '../../services'
+import { getCourseOutcome } from '../../api/CourseAPI'
+import { ErrorHelper } from '../../utils'
 
 const fetchOutcomePending = mamh => ({
     type: FETCH_COURSE_OUTCOME_PENDING,
@@ -49,7 +50,7 @@ export const fetchOutcome = mamh => {
                 dispatch(fetchOutcomeSuccess(mamh, data))
             })
             .catch(err => {
-                dispatch(fetchOutcomeFail(mamh, err.message))
+                dispatch(fetchOutcomeFail(mamh, ErrorHelper(err)))
             })
     }
 }

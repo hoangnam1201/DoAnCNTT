@@ -1,4 +1,4 @@
-import { Button, Tooltip } from "@material-ui/core"
+import { Button, IconButton, Tooltip } from "@material-ui/core"
 import { IoMdRefresh } from "react-icons/io"
 
 const CreateNew = (props) => (
@@ -7,20 +7,20 @@ const CreateNew = (props) => (
         className="d-flex pl-2 pb-2 align-items-center"
     >
         <Tooltip title="Tải lại">
-            <Button
-                className="p-0 mx-2"
+            <IconButton
+                className="p-2 mx-2"
                 onClick={() => {
                     props.setOpen(false)
                     props.fetch()
                 }}
             >
                 <IoMdRefresh size="25px" />
-            </Button>
+            </IconButton>
         </Tooltip>
         <Button
             variant="contained"
             color="primary"
-            className="light-blue-bgcolor my-2 font-weight-bold"
+            className="light-blue-bgcolor my-2"
             onClick={props.handleToggleCreate}
             disabled={props.pending}
         >

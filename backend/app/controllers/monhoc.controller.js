@@ -72,7 +72,10 @@ exports.update = function (req, res) {
         }
     })
         .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).send(err))
+        .catch(err => {
+            console.log(err)
+            res.status(500).json(err)
+        })
 }
 
 /* Xoa 1 mon hoc */

@@ -9,7 +9,7 @@ exports.read = function (req, res) {
             return res.status(200).send(data)
         })
         .catch(err => {
-            return res.status(500).send(err)
+            return res.status(400).send(err)
         })
 }
 
@@ -25,6 +25,6 @@ exports.update = function (req, res) {
         }
     })
         .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).send(err))
+        .catch(err => res.status(400).send(err))
 
 }

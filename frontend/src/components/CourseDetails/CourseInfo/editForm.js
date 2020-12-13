@@ -1,6 +1,6 @@
 import { Button, Drawer, Input } from "@material-ui/core";
 import styled from "styled-components";
-import { LoadingOverlay } from "../../StatelessComponents";
+import { LoadingOverlayDiv } from "../../common/LoadingOverlay";
 
 const Label = styled.label`
     font-size:13px;
@@ -13,7 +13,7 @@ const EditForm = (props) => {
         anchor="right"
     >
         <div className="detail-form__wrapper">
-            {props.loading && <LoadingOverlay />}
+            {props.loading && <LoadingOverlayDiv />}
             <header className="detail-form__header">
                 {props.header}
             </header>
@@ -105,7 +105,6 @@ const EditForm = (props) => {
             </div>
             <div className="detail-form__footer">
                 <Button
-                    className="text-transform-none light-blue-bgcolor"
                     color="primary"
                     variant="contained"
                     onClick={props.handleSubmit}
@@ -114,7 +113,7 @@ const EditForm = (props) => {
                     {`${props.buttonLabel || "Tạo mới"}`}
                 </Button>
                 <Button
-                    className="text-transform-none ml-3"
+                    className="ml-3"
                     color="secondary"
                     variant="outlined"
                     onClick={props.setClose}

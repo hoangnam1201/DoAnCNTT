@@ -1,10 +1,12 @@
 import { Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { Alert } from "@material-ui/lab"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { createCourseOutcome } from "../../../services"
+import { createCourseOutcome } from "../../../api/CourseAPI"
 import { fetchOutcome } from "../../../store/actions/courseOutcome.action"
-import { EmptyRow, ErrorRow, LoadingRows } from "../../SituationRow"
+import EmptyRow from "../../common/EmptyRow"
+import ErrorRow from "../../common/ErrorRow"
+import LoadingRows from "../../common/LoadingRows"
 import CreateNew from "../CreateNew"
 import OutcomeForm from "./outcomeForm"
 import Row from "./row"
@@ -76,7 +78,6 @@ const CourseOutcome = ({ mamh }) => {
                 severity={response.status}
                 className="mx-3 mb-3"
                 style={{ minWidth: "250px" }}
-                variant="filled"
             >
                 {response.message}
             </Alert>
@@ -97,7 +98,7 @@ const CourseOutcome = ({ mamh }) => {
             handleSubmit={handleSubmitCreate}
             loading={loading}
         />
-        <TableContainer className="p-2" component={Paper}>
+        <TableContainer className="light-grey-bg" component={Paper}>
             <CreateNew
                 fetch={fetch}
                 setOpen={setCreate}
@@ -110,23 +111,23 @@ const CourseOutcome = ({ mamh }) => {
             <Table style={{ minWidth: "700px" }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell width="100px" align="center" size="small">
+                        <TableCell width="100px" align="center">
                             Mục tiêu
                         </TableCell>
-                        <TableCell width="110px" align="center" size="small">
+                        <TableCell width="110px" align="center">
                             Chuẩn đầu ra HP
                         </TableCell>
-                        <TableCell align="center" size="small">
+                        <TableCell align="center">
                             Mô tả
                         </TableCell>
-                        <TableCell width="150px" align="center" size="small">
+                        <TableCell width="150px" align="center">
                             Chuẩn đầu ra CDIO
                         </TableCell>
-                        <TableCell width="150px" className="px-0" align="center" size="small">
+                        <TableCell width="120px" className="px-0" align="center">
                         </TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className="bg-white">
                     {
                         outcomes.pending
                             ? <LoadingRows col={5} />
@@ -155,10 +156,10 @@ const CourseOutcome = ({ mamh }) => {
                                         </>
                                     ))
                                     : <EmptyRow
-                                        error="Chưa có mục tiêu"
-                                        subError={(<>
+                                        header="Chưa có chuẩn đầu ra"
+                                        text={(<>
                                             Vui lòng&nbsp;
-                                                    <span onClick={() => setCreate(true)} style={{ cursor: "pointer" }} class="btn-link">
+                                            <span onClick={() => setCreate(true)} style={{ cursor: "pointer" }} class="btn-link">
                                                 tạo mới!
                                         </span>
                                         </>)}

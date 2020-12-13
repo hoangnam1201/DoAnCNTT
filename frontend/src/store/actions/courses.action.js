@@ -1,5 +1,6 @@
 import { FETCH_COURSES_PENDING, FETCH_COURSES_SUCCESS, FETCH_COURSES_FAIL, DELETE_COURSE } from '../constants/ActionTypes'
-import { getCourses, deleteCourse as deleteCourseService } from '../../services'
+import { getCourses, deleteCourse as deleteCourseService } from '../../api/CourseAPI'
+import { ErrorHelper } from '../../utils'
 
 const fetchCoursesPending = () => ({
     type: FETCH_COURSES_PENDING
@@ -30,7 +31,7 @@ export const fetchCourses = () => {
                 }
             })
             .catch(err => {
-                dispatch(fetchCoursesFail(err))
+                dispatch(fetchCoursesFail(ErrorHelper(err)))
             })
     }
 }

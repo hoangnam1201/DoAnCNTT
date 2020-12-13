@@ -7,6 +7,7 @@ var _monhoc = require("./monhoc");
 var _muctieu = require("./muctieu");
 var _ndchitiet_cdr = require("./ndchitiet_cdr");
 var _noidungchitiet = require("./noidungchitiet");
+var _account = require("./account");
 
 function initModels(sequelize) {
   var bomon = _bomon(sequelize, DataTypes);
@@ -17,37 +18,38 @@ function initModels(sequelize) {
   var muctieu = _muctieu(sequelize, DataTypes);
   var ndchitiet_cdr = _ndchitiet_cdr(sequelize, DataTypes);
   var noidungchitiet = _noidungchitiet(sequelize, DataTypes);
+  var account = _account(sequelize, DataTypes);
 
-  chuandaura.belongsTo(muctieu, { foreignKey: "ma_monhoc"});
-  muctieu.hasMany(chuandaura, { foreignKey: "ma_monhoc"});
-  chuandaura.belongsTo(muctieu, { foreignKey: "ma_monhoc"});
-  muctieu.hasMany(chuandaura, { foreignKey: "ma_muctieu"});
-  danhgia.belongsTo(monhoc, { foreignKey: "ma_monhoc"});
-  monhoc.hasMany(danhgia, { foreignKey: "ma_monhoc"});
-  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt"});
-  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "hinhthuc"});
-  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu"});
-  chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_cdr"});
-  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt"});
-  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "ma_monhoc"});
-  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu"});
-  chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_muctieu"});
-  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt"});
-  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "stt"});
-  monhoc.belongsTo(bomon, { foreignKey: "ma_bomon"});
-  bomon.hasMany(monhoc, { foreignKey: "ma_bomon"});
-  muctieu.belongsTo(monhoc, { foreignKey: "id"});
-  monhoc.hasMany(muctieu, { foreignKey: "ma_monhoc"});
-  ndchitiet_cdr.belongsTo(chuandaura, { foreignKey: "ma_muctieu"});
-  chuandaura.hasMany(ndchitiet_cdr, { foreignKey: "ma_cdr"});
-  ndchitiet_cdr.belongsTo(noidungchitiet, { foreignKey: "ma_monhoc"});
-  noidungchitiet.hasMany(ndchitiet_cdr, { foreignKey: "ma_monhoc"});
-  ndchitiet_cdr.belongsTo(chuandaura, { foreignKey: "ma_muctieu"});
-  chuandaura.hasMany(ndchitiet_cdr, { foreignKey: "ma_muctieu"});
-  ndchitiet_cdr.belongsTo(noidungchitiet, { foreignKey: "ma_monhoc"});
-  noidungchitiet.hasMany(ndchitiet_cdr, { foreignKey: "chuong"});
-  noidungchitiet.belongsTo(monhoc, { foreignKey: "ma_monhoc"});
-  monhoc.hasMany(noidungchitiet, { foreignKey: "ma_monhoc"});
+  chuandaura.belongsTo(muctieu, { foreignKey: "ma_monhoc" });
+  muctieu.hasMany(chuandaura, { foreignKey: "ma_monhoc" });
+  chuandaura.belongsTo(muctieu, { foreignKey: "ma_monhoc" });
+  muctieu.hasMany(chuandaura, { foreignKey: "ma_muctieu" });
+  danhgia.belongsTo(monhoc, { foreignKey: "ma_monhoc" });
+  monhoc.hasMany(danhgia, { foreignKey: "ma_monhoc" });
+  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt" });
+  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "hinhthuc" });
+  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
+  chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_cdr" });
+  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt" });
+  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "ma_monhoc" });
+  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
+  chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_muctieu" });
+  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt" });
+  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "stt" });
+  monhoc.belongsTo(bomon, { foreignKey: "ma_bomon" });
+  bomon.hasMany(monhoc, { foreignKey: "ma_bomon" });
+  muctieu.belongsTo(monhoc, { foreignKey: "id" });
+  monhoc.hasMany(muctieu, { foreignKey: "ma_monhoc" });
+  ndchitiet_cdr.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
+  chuandaura.hasMany(ndchitiet_cdr, { foreignKey: "ma_cdr" });
+  ndchitiet_cdr.belongsTo(noidungchitiet, { foreignKey: "ma_monhoc" });
+  noidungchitiet.hasMany(ndchitiet_cdr, { foreignKey: "ma_monhoc" });
+  ndchitiet_cdr.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
+  chuandaura.hasMany(ndchitiet_cdr, { foreignKey: "ma_muctieu" });
+  ndchitiet_cdr.belongsTo(noidungchitiet, { foreignKey: "ma_monhoc" });
+  noidungchitiet.hasMany(ndchitiet_cdr, { foreignKey: "chuong" });
+  noidungchitiet.belongsTo(monhoc, { foreignKey: "ma_monhoc" });
+  monhoc.hasMany(noidungchitiet, { foreignKey: "ma_monhoc" });
 
   return {
     bomon,
@@ -58,6 +60,7 @@ function initModels(sequelize) {
     muctieu,
     ndchitiet_cdr,
     noidungchitiet,
+    account
   };
 }
 module.exports = initModels;

@@ -12,12 +12,12 @@ import useBreadcrumbs, { routeConfig } from "../../hooks/useBreadcrumbs"
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCourses } from '../../store/actions/courses.action';
-import ErrorTable from './errorTable';
-import EmptyTable from './emptyTable';
-import LoadingTable from './loadingTable'
 import CourseRow from './courseRow';
 import { useState } from 'react';
 import FilterBar from './filter';
+import ErrorRow from '../common/ErrorRow';
+import EmptyRow from '../common/EmptyRow';
+import LoadingRows from '../common/LoadingRows';
 
 const removeAccents = str => {
     return str.normalize('NFD')
@@ -73,35 +73,45 @@ const CourseList = () => {
                 </h3>
                 <hr />
             </div>
-            <TableContainer className="p-2" component={Paper}>
+            <TableContainer elevation={3} component={Paper} className="light-grey-bg">
                 <FilterBar
                     filter={filter}
                     setFilter={setFilter}
                     initialFilter={initialFilter}
                     refresh={refresh}
                 />
-                <Table className="border-top" style={{ minWidth: "920px" }}>
+                <Table style={{ minWidth: "920px" }}>
                     <TableHead>
                         <TableRow>
                             <TableCell width="150px">Mã môn học</TableCell>
                             <TableCell>Tên môn học</TableCell>
                             <TableCell width="120px" align="center">Số tín chỉ</TableCell>
                             <TableCell width="190px">Bộ môn</TableCell>
-                            <TableCell width="120px">Phân loại</TableCell>
-                            <TableCell width="155px" align='center'>Xem chi tiết / Xóa</TableCell>
+                            <TableCell width="100px">Phân loại</TableCell>
+                            <TableCell width="120px" align='center'></TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
+                    <TableBody className="bg-white">
                         {
                             courseList.loading
-                                ? <LoadingTable />
+                                ? <LoadingRows col={6} />
                                 : courseList.error
-                                    ? <ErrorTable refresh={refresh} />
+                                    ? <ErrorRow refresh={refresh} />
                                     : filteredCourseList.length !== 0
                                         ? filteredCourseList.map(row => (
                                             <CourseRow row={row} key={row.mamh} />
                                         ))
-                                        : <EmptyTable />
+                                        : <EmptyRow
+                                            header="Không tìm thấy môn học!"
+                                            text={(
+                                                <p className="text-secondary">
+                                                    Không tồn tại môn học đang tìm, vui lòng kiểm tra lại hoặc&nbsp;
+                                                    <Link to="/course/create">
+                                                        tạo mới!
+                                                    </Link>
+                                                </p>
+                                            )}
+                                        />
                         }
                     </TableBody>
                 </Table>

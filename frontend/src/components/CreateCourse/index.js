@@ -3,9 +3,10 @@ import { useState } from "react"
 import useBreadcrumbs, { routeConfig } from "../../hooks/useBreadcrumbs"
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md'
 import { Link, useHistory } from "react-router-dom"
-import { createCourse } from "../../services"
+import { createCourse } from "../../api/CourseAPI"
 import { CreateCourseForm } from "./form"
 import { Alert, AlertTitle } from '@material-ui/lab'
+import { ErrorHelper } from "../../utils"
 
 const CreateCourse = () => {
     const initialPostingState = {
@@ -85,8 +86,7 @@ const CreateCourse = () => {
                 isPosting: false,
                 response: {
                     status: "error",
-                    message: !err.response ? "Lỗi máy chủ" :
-                        err.response.data.error
+                    message: ErrorHelper(err)
                 }
             })
         }
@@ -126,7 +126,7 @@ const CreateCourse = () => {
                 </h3>
                 <Button
                     size="small"
-                    className="text-transform-none p-0 mr-2 "
+                    className="p-0 mr-2 "
                     onClick={() => history.push('/course')}
                 >
                     <MdKeyboardArrowLeft size="1.2rem" />
@@ -138,7 +138,7 @@ const CreateCourse = () => {
         <Card className="feature-card">
             <CardHeader
                 title="Nhập thông tin môn học"
-                className="border-bottom "
+                className="border-bottom light-grey-bg"
                 disableTypography
             />
             <CardContent className="border-bottom overflow-auto">
@@ -150,13 +150,12 @@ const CreateCourse = () => {
                     }}
                 />
             </CardContent>
-            <CardActions className="justify-content-end">
+            <CardActions className="justify-content-end light-grey-bg">
                 <Button
                     onClick={handleSubmit}
                     variant="contained"
                     color="primary"
                     type="submit"
-                    className="text-transform-none font-weight-bold"
                 >
                     Tạo môn học mới
                     </Button>
