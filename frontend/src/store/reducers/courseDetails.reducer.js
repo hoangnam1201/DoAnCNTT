@@ -9,7 +9,17 @@ import {
     FETCH_COURSE_OUTCOME_PENDING,
     FETCH_COURSE_OUTCOME_SUCCESS,
     FETCH_COURSE_OUTCOME_FAIL,
+<<<<<<< Updated upstream
     UPDATE_COURSE_GOAL_SUCCESS
+=======
+    UPDATE_COURSE_GOAL_SUCCESS,
+    FETCH_COURSE_EVUALATE_SUCCESS,
+    FETCH_COURSE_EVUALATE_FAIL,
+    FETCH_COURSE_EVUALATE_PENDING,
+    FETCH_COURSE_CONTENT_SUCCESS,
+    FETCH_COURSE_CONTENT_PENDING,
+    FETCH_COURSE_CONTENT_FAIL
+>>>>>>> Stashed changes
 }
     from '../constants/ActionTypes'
 
@@ -124,6 +134,61 @@ const courseDetailReducer = (state = {}, action) => {
                 error: action.payload.error
             }
             return course
+<<<<<<< Updated upstream
+=======
+        //DANHGIA
+        case FETCH_COURSE_EVUALATE_SUCCESS:
+            course ={...state}
+            course[action.payload.mamh].evualate={
+                ...course[action.payload.mamh].evualate,
+                pending:false,
+                data: action.payload.data
+            }
+            return course
+        case FETCH_COURSE_EVUALATE_FAIL:
+            course ={...state}
+            course[action.payload.mamh].evualate={
+                ...course[action.payload.mamh].evualate,
+                pending:false,
+                error:action.payload.error
+            }
+            return course    
+        case FETCH_COURSE_EVUALATE_PENDING:
+            course ={...state}
+            course[action.payload.mamh].evualate={
+                ...course[action.payload.mamh].evualate,
+                pending:false,
+                error:''
+            }
+            return course
+        //nOIDUNG
+
+        case FETCH_COURSE_CONTENT_PENDING:
+            course = {...state}
+            course[action.payload.mamh].content ={
+                ...course[action.payload.mamh].content,
+                pending: false,
+                error:''
+            }
+            return course
+        case FETCH_COURSE_CONTENT_SUCCESS:
+            course ={...state}
+            course[action.payload.mamh].content={
+                ...course[action.payload.mamh].content,
+                pending:false,
+                data: action.payload.data
+            }
+            return course
+        case FETCH_COURSE_CONTENT_FAIL:
+            course ={...state}
+            course[action.payload.mamh].content={
+                ...course[action.payload.mamh].content,
+                pending:false,
+                error:action.payload.errors
+            }
+            return course
+
+>>>>>>> Stashed changes
         default:
             return state
     }
