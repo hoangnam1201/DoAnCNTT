@@ -1,38 +1,3 @@
-<<<<<<< Updated upstream
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
-import LoadingRows from "../../common/LoadingRows"
-
-const CourseEvualate = () => {
-    return <TableContainer className="p-2" component={Paper}>
-        <Table style={{ minWidth: "950px" }}>
-            <TableHead>
-                <TableRow>
-                    <TableCell width="100px" align="center" size="small">
-                        Hình thức KT
-                    </TableCell>
-                    <TableCell align="center" size="small">
-                        Nội dung
-                    </TableCell>
-                    <TableCell width="200px" align="center" size="small">
-                        Thời điểm
-                    </TableCell>
-                    <TableCell width="150px" align="center" size="small">
-                        Công cụ KT
-                    </TableCell>
-                    <TableCell width="150px" align="center" size="small">
-                        Chuẩn đầu ra KT
-                    </TableCell>
-                    <TableCell width="80px" align="center" size="small">
-                        Tỉ lệ
-                    </TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                <LoadingRows col={6} />
-            </TableBody>
-        </Table>
-    </TableContainer>
-=======
 import { Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@material-ui/core"
 import { Alert, AlertTitle } from "@material-ui/lab"
 import { useEffect, useState } from "react"
@@ -53,12 +18,16 @@ const CourseEvualate = ({mamh}) => {
     }
 
     const [create,setCreate] = useState(false)
+    const [goal, setGoal] = useState('')
+    const [stt,setStt] = useState('')
     const [hinhthuc,setHinhthuc] = useState('')
     const [noidung,setNoidung] = useState('')
     const [congcu_kt, setcongcu_kt] = useState('')
     const [thoidiem,setthoidiem] = useState('')
     const [cdr_kt, setcdr_kt] = useState('')
     const [tile, settile] = useState('')
+    const [response, setResponse] = useState('')
+    const [loading, setLoading] = useState(false)
     const [creating, setCreating] = useState(initialState)
     const evualates = useSelector(state => {
         console.log(mamh)
@@ -71,6 +40,8 @@ const CourseEvualate = ({mamh}) => {
     }
 
     const handleToggleCreate =()=>{
+        setStt('')
+        setGoal('')
         setHinhthuc('')
         setNoidung('')
         setcongcu_kt('')
@@ -79,37 +50,34 @@ const CourseEvualate = ({mamh}) => {
         settile('')
         setCreate(true)
     }
-    const handleSubmitCreate=()=>{
-        setCreating({ ...creating, loading: true })
-        createCourseEvualate(mamh, {
+    const handleSubmitCreate = () => {
+        setLoading(true)
+        createCourseEvualate(mamh, goal, {
+            stt: stt,
             hinhthuc: hinhthuc,
             noidung: noidung,
             congcu_kt: congcu_kt,
             thoidiem: thoidiem,
-            cdr_kt: cdr_kt,
             tile: tile
-        }).then(() => {
-            fetch()
-            setCreate(false)
-            setCreating({
-                loading: false,
-                response: {
-                    status: "success",
-                    message: "Tạo đánh giá thành công!"
-                }
-            })
         })
-            .catch(err => {
-                setCreating({
-                    loading: false,
-                    response: {
-                        status: "error",
-                        message: !err.response ? "Lỗi máy chủ" :
-                            err.response.data.error
-                    }
+            .then(() => {
+                fetch()
+                setCreate(false)
+                setLoading(false)
+                setResponse({
+                    status: "success",
+                    message: `Tạo đánh giá thành công!`
                 })
             })
-        
+            .catch(err => {
+                setLoading(false)
+                setResponse({
+                    status: "error",
+                    message: `${!err.response
+                        ? "Lỗi máy chủ"
+                        : err.response.message}`
+                })
+            })
     }
 
 
@@ -120,38 +88,39 @@ const CourseEvualate = ({mamh}) => {
 
     return <>
         <Snackbar
-            open={creating.response.status}
-            onClose={() => setCreating(initialState)}
+            open={response}
+            onClose={() => setResponse('')}
         >
             <Alert
-                onClose={() => setCreating(initialState)}
-                severity={creating.response.status}
+                onClose={() => setResponse('')}
+                severity={response.status}
                 className="mx-3 mb-3"
                 style={{ minWidth: "250px" }}
             >
-                <AlertTitle className="text-capitalize font-weight-bold">
-                    {creating.response.status}
-                </AlertTitle>
-                {creating.response.message}
+                {response.message}
             </Alert>
         </Snackbar>
         <EvualateForm
             header="Tạo đánh giá mới"
             open={create}
             setClose={() => setCreate(false)}
+            stt ={stt}
+            goal = {goal}
             hinhthuc={hinhthuc}
             noidung = {noidung}
             congcu_kt ={congcu_kt}
             thoidiem = {thoidiem}
             cdr_kt = {cdr_kt}
             tile = {tile}
+            setStt = {setStt}
+            setGoal ={setGoal}
             setHinhthuc = {setHinhthuc}
             setNoidung = {setNoidung}
             setcongcu_kt ={setcongcu_kt}
             setthoidiem ={setthoidiem}
             setcdr_kt ={setcdr_kt}
             settile = {settile}
-            loading={creating.loading}
+            loading={loading}
             handleSubmit={handleSubmitCreate}
         />
         <TableContainer className="p-2" component={Paper}>
@@ -160,6 +129,7 @@ const CourseEvualate = ({mamh}) => {
                 setOpen={setCreate}
                 pending={evualates.pending}
                 label="Tạo Đánh Giá"
+                handleSubmitCreate={handleSubmitCreate}
                 handleToggleCreate={handleToggleCreate}
             />
             <Table style={{ minWidth: "750px" }}>
@@ -168,7 +138,7 @@ const CourseEvualate = ({mamh}) => {
                         <TableCell align="center" size="small">
                             Hình thức KT
                         </TableCell>
-                        <TableCell width="150px" align="center" size="small">
+                        <TableCell width="250px" align="center" size="small">
                             Nội Dung
                         </TableCell>
                         <TableCell width="150px" align="center" size="small">
@@ -183,8 +153,6 @@ const CourseEvualate = ({mamh}) => {
                         <TableCell width="150px" align="center" size="small">
                             Tỉ Lệ
                         </TableCell>
-                        <TableCell width="150px" className="px-0" align="center" size="small">
-                        </TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -195,7 +163,7 @@ const CourseEvualate = ({mamh}) => {
                                 ? <ErrorRow refresh={fetch} />
                                 :evualates.data && data.length !== 0
                                     ? data.map(row => (
-                                        <Row row={row} mamh={mamh} key={row.hinhthuc} />
+                                        <Row row={row} mamh={mamh} key={row.hinhthuc} setResponse={setResponse} fetch={fetch} muctieu={row.muctieu} />
                                     ))
                                     : <EmptyRow
                                         error="Chưa có đánh giá"
@@ -211,7 +179,6 @@ const CourseEvualate = ({mamh}) => {
             </Table>
         </TableContainer>
     </>
->>>>>>> Stashed changes
 }
 
 export default CourseEvualate

@@ -9,9 +9,6 @@ import {
     FETCH_COURSE_OUTCOME_PENDING,
     FETCH_COURSE_OUTCOME_SUCCESS,
     FETCH_COURSE_OUTCOME_FAIL,
-<<<<<<< Updated upstream
-    UPDATE_COURSE_GOAL_SUCCESS
-=======
     UPDATE_COURSE_GOAL_SUCCESS,
     FETCH_COURSE_EVUALATE_SUCCESS,
     FETCH_COURSE_EVUALATE_FAIL,
@@ -19,7 +16,6 @@ import {
     FETCH_COURSE_CONTENT_SUCCESS,
     FETCH_COURSE_CONTENT_PENDING,
     FETCH_COURSE_CONTENT_FAIL
->>>>>>> Stashed changes
 }
     from '../constants/ActionTypes'
 
@@ -134,8 +130,6 @@ const courseDetailReducer = (state = {}, action) => {
                 error: action.payload.error
             }
             return course
-<<<<<<< Updated upstream
-=======
         //DANHGIA
         case FETCH_COURSE_EVUALATE_SUCCESS:
             course ={...state}
@@ -188,7 +182,6 @@ const courseDetailReducer = (state = {}, action) => {
             }
             return course
 
->>>>>>> Stashed changes
         default:
             return state
     }

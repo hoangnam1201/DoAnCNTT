@@ -5,14 +5,16 @@ import { AiOutlineEdit } from "react-icons/ai"
 import { BsTrash } from "react-icons/bs"
 import { useDispatch } from "react-redux"
 import { deleteCourseEvualate, updateCourseEvualate } from "../../../services"
-import { deleteEvualateSuccess, updateEvualateSuccess } from "../../../store/actions/courseEvualate.action"
 import { LoadingCellOverlay } from "../../StatelessComponents"
 import EvualateForm from "./EvualateForm"
+import { ErrorHelper } from "../../../utils"
+import ConfirmDeleteForm from "../../common/ConfirmDeleteForm"
 
-
-const Row = ({ row, mamh }) => {
+const Row = ({ row, mamh, muctieu, fetch, setResponse }) => {
     const [loading, setLoading] = useState(false)
     const [flag, setFlag] = useState('')
+    const [goal, setGoal]  = useState(muctieu)
+    const [stt,setStt] = useState(row.stt)
     const [hinhthuc, setHinhthuc] = useState(row.hinhthuc)
     const [noidung, setNoidung] = useState(row.noidung)
     const [congcu_kt, setcongcu_kt] = useState(row.congcu_kt)
@@ -23,20 +25,30 @@ const Row = ({ row, mamh }) => {
     const dispatch = useDispatch()
 
     const handleSubmitDelete = async () => {
-        setLoading(true)
+        setLoading('ROW')
         setFlag('')
-        deleteCourseEvualate(mamh, row.hinhthuc)
+        deleteCourseEvualate(mamh, muctieu, row.hinhthuc)
             .then(() => {
-                dispatch(deleteEvualateSuccess(mamh, row.hinhthuc))
+                fetch()
+                setResponse({
+                    status: "success",
+                    message: "Xóa môn học thành công"
+                })
             })
             .catch(err => {
                 setLoading(false)
+                setResponse({
+                    status: "error",
+                    message: "Xóa môn học thất bại"
+                })
             })
     }
 
     const handleSubmitEdit = async () => {
         setLoading(true)
         const data = {
+            goal: goal,
+            stt: stt,
             hinhthuc: hinhthuc,
             noidung: noidung,
             congcu_kt: congcu_kt,
@@ -44,20 +56,20 @@ const Row = ({ row, mamh }) => {
             cdr_kt: cdr_kt,
             tile: tile
         }
-        updateCourseEvualate(mamh, row.hinhthuc, data)
+        updateCourseEvualate(mamh, muctieu, data)
             .then(() => {
-                dispatch(updateEvualateSuccess(mamh, row.hinhthuc, data))
                 setLoading(false)
-                setFlag({
+                setResponse({
                     status: "success",
-                    message: `Chỉnh sửa đánh giá ${hinhthuc} thành công!`
+                    message: "Chỉnh sửa môn học thành công!"
                 })
+                fetch()
             })
             .catch(err => {
                 setLoading(false)
-                setFlag({
+                setResponse({
                     status: "error",
-                    message: `Chỉnh sửa đánh giá ${hinhthuc} thất bại!`
+                    message: `Chỉnh sửa môn học thất bại ${ErrorHelper(err)}`
                 })
             })
     }
@@ -67,33 +79,21 @@ const Row = ({ row, mamh }) => {
     }
 
     return (
-        <>
-            <Snackbar
-                open={flag.status}
-                onClose={() => setFlag('')}
-            >
-                <Alert
-                    onClose={() => setFlag('')}
-                    severity={flag.status}
-                    className="mx-3 mb-3"
-                    style={{ minWidth: "250px" }}
-                >
-                    <AlertTitle className="text-capitalize font-weight-bold">
-                        {flag.status}
-                    </AlertTitle>
-                    {flag.message}
-                </Alert>
-            </Snackbar>
+        <>          
             <EvualateForm
                 header={`Chỉnh sửa đánh giá ${row.hinhthuc}`}
                 open={flag === "EDIT"}
                 setClose={() => setFlag("")}
+                goal = {goal}
+                stt ={stt}
                 hinhthuc={hinhthuc}
                 noidung = {noidung}
                 congcu_kt ={congcu_kt}
                 thoidiem = {thoidiem}
                 cdr_kt = {cdr_kt}
                 tile = {tile}
+                setGoal ={setGoal}
+                setStt={setStt}
                 setHinhthuc = {setHinhthuc}
                 setNoidung = {setNoidung}
                 setcongcu_kt ={setcongcu_kt}
@@ -103,35 +103,14 @@ const Row = ({ row, mamh }) => {
                 loading={loading}
                 handleSubmit={handleSubmitEdit}
             />
-            <Dialog open={(flag === 'ConfirmDelete')} onClose={() => setFlag('')}>
-                <Card className="p-3">
-                    <CardHeader
-                        disableTypography
-                        title={`Xóa đánh giá`}
-                        className="page-title primary-logo-color"
-                    />
-                    <CardContent>
-                        Xác nhận đánh giá {row.hinhthuc}
-                        <span className="font-weight-bold font-italic">
-                            {row.tenmh}
-                        </span>.
-                    </CardContent>
-                    <CardActions>
-                        <button
-                            onClick={handleSubmitDelete}
-                            className="btn btn-block btn-danger"
-                        >
-                            Xóa
-                    </button>
-                        <button
-                            onClick={() => setFlag('')}
-                            className="btn btn-block btn-light"
-                        >
-                            Hủy
-                    </button>
-                    </CardActions>
-                </Card>
-            </Dialog>
+           <ConfirmDeleteForm
+                open={(flag === 'ConfirmDelete')}
+                onClose={() => setFlag('')}
+                onSubmit={handleSubmitDelete}
+                label="Đánh giá"
+                warning="Xóa chuẩn đầu ra vĩnh viễn. Không thể khôi phục."
+                name={row.hinhthuc}
+            />
             <TableRow style={{ transform: "scale(1)" }}>     
                 <TableCell className="break-line" style={{ verticalAlign: 'top' }} >
                     {row.hinhthuc}
