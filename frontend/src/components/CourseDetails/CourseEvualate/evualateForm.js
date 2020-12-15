@@ -13,15 +13,25 @@ const Label = styled.label`
 
 const EvualateForm = props => {
     const [loading, setLoading] = useState(false)
-    const [goals, setGoals] = useState(null)
+    const [outcomes, setOutcomes] = useState(null)
+
+    const onCheck = (e, data) => {
+        if (e.target.checked) {
+            props.setCdr(props.cdr.concat(data))
+        }
+        else {
+            props.setCdr(props.cdr.filter(ele => ele !== data))
+
+        }
+    }
+
     useEffect(() => {
         if (props.open) {
             setLoading(true)
             getCourseGoalList(props.mamh)
                 .then(data => {
-                    props.setGoal(data[0])
                     setLoading(false)
-                    setGoals(data)
+                    setOutcomes(data)
                 })
                 .catch(err => {
                     alert(ErrorHelper(err))
@@ -29,15 +39,15 @@ const EvualateForm = props => {
                 })
         }
     }, [props.open])
-    
-    
+
+
     return <Drawer
         open={props.open}
         anchor="right"
     >
         <div className="detail-form__wrapper">
             {
-                (loading || !goals)
+                (loading || !outcomes)
                     ? <LoadingOverlayDiv />
                     : <>
                         {props.loading && <LoadingOverlayDiv />}
@@ -46,7 +56,7 @@ const EvualateForm = props => {
                         </header>
                         <div className="detail-form__main">
                             {
-                                goals.length === 0
+                                outcomes.length === 0
                                     ? <div className="flex-center flex-column h-100">
                                         <AiOutlineWarning className="text-danger" size="100px" />
                                         <h3
@@ -123,10 +133,10 @@ const EvualateForm = props => {
                                             <Input
                                                 id="thoidiem"
                                                 value={props.thoidiem}
-                                                onChange={e => props.setthoidiem(e.target.value)}                                              
+                                                onChange={e => props.setthoidiem(e.target.value)}
                                                 inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                                 fullWidth
-                                                disableUnderline                                               
+                                                disableUnderline
                                             />
                                         </div>
                                         <div className="mt-2">
