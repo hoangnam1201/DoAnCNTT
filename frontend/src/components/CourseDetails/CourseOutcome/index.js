@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { createCourseOutcome } from "../../../api/CourseAPI"
 import { fetchOutcome } from "../../../store/actions/courseOutcome.action"
+import { ErrorHelper } from "../../../utils"
 import EmptyRow from "../../common/EmptyRow"
 import ErrorRow from "../../common/ErrorRow"
 import LoadingRows from "../../common/LoadingRows"
@@ -56,9 +57,7 @@ const CourseOutcome = ({ mamh }) => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: `${!err.response
-                        ? "Lỗi máy chủ"
-                        : err.response.message}`
+                    message: ErrorHelper(err)
                 })
             })
     }

@@ -27,26 +27,29 @@ exports.read = function (req, res) {
 }
 
 /* Tao noi dung */
-exports.create = function (req, res) {
-    const chuandaura = req.body.chuandaura.map(cdr => ({
-        ma_cdr: cdr.ma_cdr,
-        ma_muctieu: cdr.muctieu,
-        ma_monhoc: req.params.mamh,
-        chuong: req.body.chuong,
-        trenlop_onha: cdr.trenlop_onha
-    }))
-    noidungchitiet.create({
-        chuong: req.body.chuong,
-        tuan: req.body.tuan,
-        ma_monhoc: req.params.mamh,
-        nd_trenlop: req.body.nd_trenlop,
-        nd_onha: req.body.nd_onha,
-        ndchitiet_cdrs: chuandaura
-    }, {
-        include: [ndchitiet_cdr]
-    })
-        .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).send(err))
+exports.create = async function (req, res) {
+    const t = await sequelize.transaction()
+    try {
+        const chuandaura = req.body.chuandaura.map(cdr => ({
+            ma_cdr: cdr.ma_cdr,
+            ma_muctieu: cdr.muctieu,
+            ma_monhoc: req.params.mamh,
+            chuong: req.body.chuong,
+            trenlop_onha: cdr.trenlop_onha
+        }))
+        await noidungchitiet.create({
+            chuong: req.body.chuong,
+            tuan: req.body.tuan,
+            ma_monhoc: req.params.mamh,
+            nd_trenlop: req.body.nd_trenlop,
+            nd_onha: req.body.nd_onha
+        })
+        await ndchitiet_cdr.bulkCreate(chuandaura)
+    }
+    catch (err) {
+        await t.rollback();
+        res.status(500).send(err);
+    }
 }
 
 /* Chinh sua */
@@ -94,4 +97,16 @@ exports.update = async function (req, res) {
         await t.rollback();
         res.status(500).send(err);
     }
+}
+
+exports.delete = function (req, res) {
+    noidungchitiet.destroy({
+        where: {
+            id: req.params.cdr,
+            ma_monhoc: req.params.mamh,
+            ma_muctieu: req.params.muctieu
+        }
+    })
+        .then(() => res.sendStatus(200))
+        .catch(err => res.status(500).send(err))
 }

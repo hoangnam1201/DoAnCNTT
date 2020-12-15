@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { loginCall } from '../../api/UserAPI'
 import logo_truong from '../../assets/logo-truong-name.png'
 import { login } from '../../store/actions/account.action'
+import { ErrorHelper } from '../../utils'
 
 const Hr = styled.hr`
     margin: 40px 0;
@@ -45,6 +46,7 @@ const LoginPage = () => {
         setLoading(true)
         try {
             const res = await loginCall({ username, password })
+            console.log(res)
             if (res.status === 200) {
                 dispatch(login(res.data))
             }
@@ -54,7 +56,7 @@ const LoginPage = () => {
             setError({
                 username: false,
                 password: false,
-                message: err.response.data.message
+                message: ErrorHelper(err)
             })
         }
     }

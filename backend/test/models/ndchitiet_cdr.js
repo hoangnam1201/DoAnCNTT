@@ -1,25 +1,28 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
-module.exports = function (sequelize, DataTypes) {
-  var danhgia_chuandaura = sequelize.define('danhgia_chuandaura', {
-    hinhthuc: {
-      type: DataTypes.STRING(25),
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'danhgia',
-        key: 'hinhthuc'
-      }
-    },
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('ndchitiet_cdr', {
     ma_monhoc: {
       type: DataTypes.STRING(15),
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'chuandaura',
+        model: 'noidungchitiet',
         key: 'ma_monhoc'
       }
+    },
+    chuong: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'noidungchitiet',
+        key: 'ma_monhoc'
+      }
+    },
+    trenlop_onha: {
+      type: DataTypes.STRING(15),
+      allowNull: false,
+      primaryKey: true
     },
     ma_cdr: {
       type: DataTypes.STRING(10),
@@ -27,7 +30,7 @@ module.exports = function (sequelize, DataTypes) {
       primaryKey: true,
       references: {
         model: 'chuandaura',
-        key: 'id'
+        key: 'ma_muctieu'
       }
     },
     ma_muctieu: {
@@ -41,22 +44,21 @@ module.exports = function (sequelize, DataTypes) {
     }
   }, {
     sequelize,
-    tableName: 'danhgia_chuandaura',
+    tableName: 'ndchitiet_cdr',
     schema: 'public',
     timestamps: false,
     indexes: [
       {
-        name: "danhgia_chuandaura_pkey",
+        name: "ndchitiet_cdr_pkey",
         unique: true,
         fields: [
-          { name: "hinhthuc" },
           { name: "ma_monhoc" },
+          { name: "chuong" },
+          { name: "trenlop_onha" },
           { name: "ma_cdr" },
           { name: "ma_muctieu" },
         ]
       },
     ]
   });
-  danhgia_chuandaura.removeAttribute('id');
-  return danhgia_chuandaura;
 };

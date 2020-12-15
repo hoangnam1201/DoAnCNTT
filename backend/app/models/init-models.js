@@ -26,16 +26,13 @@ function initModels(sequelize) {
   muctieu.hasMany(chuandaura, { foreignKey: "ma_muctieu" });
   danhgia.belongsTo(monhoc, { foreignKey: "ma_monhoc" });
   monhoc.hasMany(danhgia, { foreignKey: "ma_monhoc" });
-  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt" });
+  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "hinhthuc" });
   danhgia.hasMany(danhgia_chuandaura, { foreignKey: "hinhthuc" });
   danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
   chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_cdr" });
-  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt" });
   danhgia.hasMany(danhgia_chuandaura, { foreignKey: "ma_monhoc" });
   danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
   chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_muctieu" });
-  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "stt" });
-  danhgia.hasMany(danhgia_chuandaura, { foreignKey: "stt" });
   monhoc.belongsTo(bomon, { foreignKey: "ma_bomon" });
   bomon.hasMany(monhoc, { foreignKey: "ma_bomon" });
   muctieu.belongsTo(monhoc, { foreignKey: "id" });

@@ -52,6 +52,9 @@ export const getCourseOutcome = mamh => {
     return http.get(`/monhoc/${mamh}/chuandaura`).then(res => res.data)
 }
 
+export const getCourseOutcomeList = mamh => {
+    return http.get(`/monhoc/${mamh}/chuandaura/list`).then(res => res.data)
+}
 export const createCourseOutcome = (mamh, muctieu, data) => {
     return http.post(`/monhoc/${mamh}/chuandaura/${muctieu}`, data)
 }
@@ -62,4 +65,21 @@ export const updateCourseOutcome = (mamh, muctieu, outcome, data) => {
 
 export const deleteCourseOutcome = (mamh, muctieu, cdr) => {
     return http.delete(`/monhoc/${mamh}/chuandaura/${muctieu}/${cdr}`)
+}
+
+//Danh gia
+export const getCourseEvualate = mamh => {
+    return http.get(`/monhoc/${mamh}/danhgia`).then(res => res.data)
+}
+
+export const createCourseEvualate = (mamh, data) => {
+    return http.post(`/monhoc/${mamh}/danhgia`, data)
+}
+
+export const updateCourseEvualate = (mamh, hinhthuc, stt, data) => {
+    return http.put(`/monhoc/${mamh}/danhgia/?ht=${hinhthuc}&stt=${stt}`, data)
+}
+
+export const deleteCourseEvualate = (mamh, hinhthuc, stt) => {
+    return http.delete(`/monhoc/${mamh}/danhgia/?ht=${hinhthuc}&stt=${stt}`)
 }

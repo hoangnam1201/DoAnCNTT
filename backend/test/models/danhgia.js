@@ -1,28 +1,26 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  var danhgia = sequelize.define('danhgia', {
+  return sequelize.define('danhgia', {
     hinhthuc: {
-      type: DataTypes.STRING(25),
+      type: DataTypes.TEXT,
       allowNull: false,
       primaryKey: true
     },
     noidung: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TEXT,
       allowNull: false
     },
     thoidiem: {
-      type: DataTypes.STRING(25),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: true
     },
     congcu_kt: {
-      type: DataTypes.STRING(25),
-      allowNull: false
+      type: DataTypes.TEXT,
+      allowNull: true
     },
     tile: {
       type: DataTypes.DOUBLE,
-      allowNull: false
+      allowNull: true
     },
     ma_monhoc: {
       type: DataTypes.STRING(15),
@@ -35,7 +33,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     phanloai: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     }
   }, {
     sequelize,
@@ -53,6 +51,4 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-  danhgia.removeAttribute('id');
-  return danhgia;
 };
