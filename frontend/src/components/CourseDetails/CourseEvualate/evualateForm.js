@@ -1,7 +1,7 @@
-import { Button, Drawer, Input } from "@material-ui/core";
+import { Button, Checkbox, Drawer, FormControlLabel, Input } from "@material-ui/core";
 import styled from "styled-components";
 import { LoadingOverlayDiv } from "../../common/LoadingOverlay";
-import { getCourseGoalList } from "../../../api/CourseAPI";
+import { getCourseGoalList, getCourseOutcomeList } from "../../../api/CourseAPI";
 import { ErrorHelper } from "../../../utils";
 import { useEffect, useState } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
@@ -28,7 +28,7 @@ const EvualateForm = props => {
     useEffect(() => {
         if (props.open) {
             setLoading(true)
-            getCourseGoalList(props.mamh)
+            getCourseOutcomeList(props.mamh)
                 .then(data => {
                     setLoading(false)
                     setOutcomes(data)
@@ -71,43 +71,88 @@ const EvualateForm = props => {
                                     </div>
                                     : <>
                                         <div className="mt-2">
-                                            <Label for="goal">
-                                                Mục tiêu
-                                            </Label>
-                                            <select
-                                                disabled={props.edit}
-                                                className="form-control border grey-200-bg p-1"
-                                                value={props.goal}
-                                                onChange={e => props.setGoal(e.target.value)}
-                                            >
-                                                {goals.map(goal => (
-                                                    <option>
-                                                        {goal}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="mt-2">
-                                            <Label for="stt">
-                                                STT
+                                            <Label for="hinhthuc">
+                                                Hình thức
                                             </Label>
                                             <Input
-                                                id="stt"
-                                                value={props.stt}
-                                                onChange={e => props.setStt(e.target.value)}
+                                                id="hinhthuc"
+                                                value={props.hinhthuc}
+                                                onChange={e => props.setHinhthuc(e.target.value)}
                                                 fullWidth
                                                 disableUnderline
                                                 inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                             />
                                         </div>
                                         <div className="mt-2">
-                                            <Label for="hinhthuc">
-                                                Hình Thức KT
+                                            <Label for="phanloai">
+                                                Phân loại
                                             </Label>
                                             <Input
-                                                id="hinhthuc"
-                                                value={props.hinhthuc}
-                                                onChange={e => props.setHinhthuc(e.target.value)}
+                                                id="phanloai"
+                                                value={props.phanloai}
+                                                onChange={e => props.setPhanloai(e.target.value)}
+                                                fullWidth
+                                                disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <Label for="thoidiem">
+                                                Thời Điểm
+                                            </Label>
+                                            <Input
+                                                id="thoidiem"
+                                                value={props.thoidiem}
+                                                onChange={e => props.setThoidiem(e.target.value)}
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                                fullWidth
+                                                disableUnderline
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <Label for="congcu_kt">
+                                                Công Cụ KT
+                                            </Label>
+                                            <Input
+                                                id="congcu_kt"
+                                                value={props.congcu_kt}
+                                                onChange={e => props.setCongcuKT(e.target.value)}
+                                                fullWidth
+                                                disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <Label for="cdr">
+                                                Chuẩn đầu ra
+                                            </Label>
+                                            <div className="row">
+                                                {outcomes.map(ele => (
+                                                    <FormControlLabel
+                                                        control={
+                                                            <Checkbox
+                                                                onChange={e => onCheck(e, ele)}
+                                                                name={ele.cdr}
+                                                                color="primary"
+                                                            />
+                                                        }
+                                                        label={ele.cdr}
+                                                        className="m-0 col-6"
+                                                    />
+
+                                                ))
+                                                }
+                                            </div>
+                                        </div>
+                                        <div className="mt-2">
+                                            <Label for="tile">
+                                                Tỉ lệ
+                                            </Label>
+                                            <Input
+                                                type="number"
+                                                id="tile"
+                                                value={props.tile}
+                                                onChange={e => props.setTile(e.target.value)}
                                                 fullWidth
                                                 disableUnderline
                                                 inputProps={{ className: "grey-200-bg border p-2 rounded" }}
@@ -121,45 +166,6 @@ const EvualateForm = props => {
                                                 id="noidung"
                                                 value={props.noidung}
                                                 onChange={e => props.setNoidung(e.target.value)}
-                                                fullWidth
-                                                disableUnderline
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
-                                            />
-                                        </div>
-                                        <div className="mt-2">
-                                            <Label for="thoidiem">
-                                                Thời Điểm
-                                            </Label>
-                                            <Input
-                                                id="thoidiem"
-                                                value={props.thoidiem}
-                                                onChange={e => props.setthoidiem(e.target.value)}
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
-                                                fullWidth
-                                                disableUnderline
-                                            />
-                                        </div>
-                                        <div className="mt-2">
-                                            <Label for="congcu_kt">
-                                                Công Cụ KT
-                                            </Label>
-                                            <Input
-                                                id="congcu_kt"
-                                                value={props.congcu_kt}
-                                                onChange={e => props.setcongcu_kt(e.target.value)}
-                                                fullWidth
-                                                disableUnderline
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
-                                            />
-                                        </div>
-                                        <div className="mt-2">
-                                            <Label for="tile">
-                                                Tỉ lệ
-                                            </Label>
-                                            <Input
-                                                id="tile"
-                                                value={props.tile}
-                                                onChange={e => props.settile(e.target.value)}
                                                 fullWidth
                                                 disableUnderline
                                                 inputProps={{ className: "grey-200-bg border p-2 rounded" }}
