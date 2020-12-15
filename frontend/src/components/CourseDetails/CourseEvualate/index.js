@@ -9,7 +9,7 @@ import LoadingRows from "../../common/LoadingRows"
 import CreateNew from "../CreateNew"
 import ErrorRow from "../../common/ErrorRow"
 import Row from "./row"
-import EvualateForm from './evualateForm'
+import EvualateForm from './EvualateForm'
 import EmptyRow from "../../common/EmptyRow"
 
 const CourseEvualate = ({ mamh }) => {

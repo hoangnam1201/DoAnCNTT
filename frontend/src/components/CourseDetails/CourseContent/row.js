@@ -14,48 +14,50 @@ const Row = ({ row, mamh }) => {
     const [loading, setLoading] = useState(false)
     const [flag, setFlag] = useState('')
     const [tuan,setTuan] = useState(row.tuan)
-    const[noidung, setNoidung] = useState(row.noidung)
-    const[cdr_hp,setCdr_hp] = useState(row.cdr_hp)
+    const [chuong, setChuong] = useState(row.chuong)
+    const [nd_trenlop, setNd_trenlop] = useState(row.nd_trenlop)
+    const [nd_onha, setNd_onha] = useState(row.nd_onha)
+    const [outcome, setOutcome] = useState(row.outcome)
 
     const dispatch = useDispatch()
 
     const handleSubmitDelete = async () => {
         setLoading(true)
         setFlag('')
-        deleteCourseContent(mamh, row.tuan)
+        deleteCourseContent(mamh, row.outcome)
             .then(() => {
-                dispatch(deleteContentSuccess(mamh, row.tuan))
+                dispatch(deleteContentSuccess(mamh, row.outcome))
             })
             .catch(err => {
                 setLoading(false)
             })
     }
 
-    const handleSubmitEdit = async () => {
+/*     const handleSubmitEdit = async () => {
         setLoading(true)
         const data = {
             tuan: tuan,
             noidung: noidung,
             cdr_hp: cdr_hp
         }
-        updateCourseContent(mamh, row.hinhthuc, data)
+        updateCourseContent(mamh, row.outcome, data)
             .then(() => {
-                dispatch(updateContentSuccess(mamh, row.tuan, data))
+                dispatch(updateContentSuccess(mamh, row.outcome, data))
                 setLoading(false)
                 setFlag({
                     status: "success",
-                    message: `Chỉnh sửa noi dung ${tuan} thành công!`
+                    message: `Chỉnh sửa noi dung ${outcome} thành công!`
                 })
             })
             .catch(err => {
                 setLoading(false)
                 setFlag({
                     status: "error",
-                    message: `Chỉnh sửa nội dung ${tuan} thất bại!`
+                    message: `Chỉnh sửa nội dung ${outcome} thất bại!`
                 })
             })
     }
-
+ */
     const handleToggleDelete = () => {
         setFlag('ConfirmDelete')
     }
@@ -78,7 +80,7 @@ const Row = ({ row, mamh }) => {
                     {flag.message}
                 </Alert>
             </Snackbar>
-            <ContentForm
+{/*             <ContentForm
                 header={`Chỉnh sửa nội dung ${row.tuan}`}
                 open={flag === "EDIT"}
                 setClose={() => setFlag("")}
@@ -91,7 +93,7 @@ const Row = ({ row, mamh }) => {
                 loading={loading}
                 handleSubmit={handleSubmitEdit}
             />
-            <Dialog open={(flag === 'ConfirmDelete')} onClose={() => setFlag('')}>
+ */}            <Dialog open={(flag === 'ConfirmDelete')} onClose={() => setFlag('')}>
                 <Card className="p-3">
                     <CardHeader
                         disableTypography
