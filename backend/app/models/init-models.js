@@ -29,9 +29,12 @@ function initModels(sequelize) {
   danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "hinhthuc" });
   danhgia.hasMany(danhgia_chuandaura, { foreignKey: "hinhthuc" });
   danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
+  chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_monhoc" });
   chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_cdr" });
+  danhgia_chuandaura.belongsTo(danhgia, { foreignKey: "ma_monhoc" });
   danhgia.hasMany(danhgia_chuandaura, { foreignKey: "ma_monhoc" });
-  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_muctieu" });
+  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_monhoc" });
+  danhgia_chuandaura.belongsTo(chuandaura, { foreignKey: "ma_cdr" });
   chuandaura.hasMany(danhgia_chuandaura, { foreignKey: "ma_muctieu" });
   monhoc.belongsTo(bomon, { foreignKey: "ma_bomon" });
   bomon.hasMany(monhoc, { foreignKey: "ma_bomon" });
@@ -47,6 +50,7 @@ function initModels(sequelize) {
   noidungchitiet.hasMany(ndchitiet_cdr, { foreignKey: "chuong" });
   noidungchitiet.belongsTo(monhoc, { foreignKey: "ma_monhoc" });
   monhoc.hasMany(noidungchitiet, { foreignKey: "ma_monhoc" });
+
 
   return {
     bomon,

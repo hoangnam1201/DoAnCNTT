@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+module.exports = function (sequelize, DataTypes) {
   var danhgia = sequelize.define('danhgia', {
     hinhthuc: {
       type: DataTypes.STRING(25),
@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     phanloai: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      allowNull: false
     }
   }, {
     sequelize,
@@ -47,8 +47,8 @@ module.exports = function(sequelize, DataTypes) {
         name: "danhgia_pkey",
         unique: true,
         fields: [
-          { name: "hinhthuc" },
           { name: "ma_monhoc" },
+          { name: "hinhthuc" },
         ]
       },
     ]

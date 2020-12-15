@@ -1,24 +1,22 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
-  var danhgia_chuandaura = sequelize.define('danhgia_chuandaura', {
-    hinhthuc: {
-      type: DataTypes.STRING(25),
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'danhgia',
-        key: 'hinhthuc'
-      }
-    },
+  return sequelize.define('danhgia_chuandaura', {
     ma_monhoc: {
       type: DataTypes.STRING(15),
       allowNull: false,
       primaryKey: true,
       references: {
-        model: 'chuandaura',
+        model: 'danhgia',
         key: 'ma_monhoc'
+      }
+    },
+    hinhthuc: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      primaryKey: true,
+      references: {
+        model: 'danhgia',
+        key: 'hinhthuc'
       }
     },
     ma_cdr: {
@@ -27,7 +25,7 @@ module.exports = function (sequelize, DataTypes) {
       primaryKey: true,
       references: {
         model: 'chuandaura',
-        key: 'id'
+        key: 'ma_muctieu'
       }
     },
     ma_muctieu: {
@@ -49,14 +47,12 @@ module.exports = function (sequelize, DataTypes) {
         name: "danhgia_chuandaura_pkey",
         unique: true,
         fields: [
-          { name: "hinhthuc" },
           { name: "ma_monhoc" },
+          { name: "hinhthuc" },
           { name: "ma_cdr" },
           { name: "ma_muctieu" },
         ]
       },
     ]
   });
-  danhgia_chuandaura.removeAttribute('id');
-  return danhgia_chuandaura;
 };

@@ -6,26 +6,36 @@ const danhgia_chuandaura = Models.danhgia_chuandaura
 const danhgia = Models.danhgia
 
 /* Xem danh gia */
-exports.read = function (req, res) {
-    danhgia.findAll({
-        include: danhgia_chuandaura,
-        where: {
-            ma_monhoc: req.params.mamh
-        }
-    })
-        .then(data => {
-            data = data.map(danhgia => ({
+exports.read = async function (req, res) {
+    try {
+        let data = await danhgia.findAll({
+            where: {
+                ma_monhoc: req.params.mamh
+            }
+        })
+        data = await Promise.all(data.map(async (danhgia) => {
+            let chuandaura = await danhgia_chuandaura.findAll({
+                where: {
+                    ma_monhoc: req.params.mamh,
+                    hinhthuc: danhgia.hinhthuc
+                }
+            })
+            chuandaura = chuandaura.map(cdr => cdr.ma_cdr)
+            return ({
                 hinhthuc: danhgia.hinhthuc,
                 phanloai: danhgia.phanloai,
                 noidung: danhgia.noidung,
                 thoidiem: danhgia.thoidiem,
                 congcu_kt: danhgia.congcu_kt,
                 tile: danhgia.tile,
-                chuandaura: danhgia.danhgia_chuandauras.map(cdr => cdr.ma_cdr)
-            }))
-            return res.status(200).send(data)
-        })
-        .catch(err => res.status(400).send(err))
+                chuandaura
+            })
+        }))
+        return res.status(200).send(data)
+    }
+    catch (err) {
+        res.status(400).send(err)
+    }
 }
 
 /* Tao danh gia */

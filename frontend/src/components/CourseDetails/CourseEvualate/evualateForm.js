@@ -5,25 +5,23 @@ import styled from "styled-components";
 import { getCourseOutcomeList } from "../../../api/CourseAPI";
 import { ErrorHelper } from "../../../utils";
 import { LoadingOverlayDiv } from "../../common/LoadingOverlay";
+import { LoadingOverlay } from "../../StatelessComponents";
 
 const Label = styled.label`
     font-size:13px;
     font-weight:600;
 `
 
-const EluavateForm = (props) => {
+const EvualateForm = props => {
     const [loading, setLoading] = useState(false)
     const [outcomes, setOutcomes] = useState(null)
-    console.log(props.cdr)
 
-    const onCheck = (e, data) => {
+    const handleChange = (e, data) => {
         if (e.target.checked) {
             props.setCdr(props.cdr.concat(data))
         }
         else {
-            props.setCdr(props.cdr.filter(ele => (
-                ele !== data
-            )))
+            props.setCdr(props.cdr.filter(ele => ele !== data))
         }
     }
 
@@ -32,7 +30,6 @@ const EluavateForm = (props) => {
             setLoading(true)
             getCourseOutcomeList(props.mamh)
                 .then(data => {
-                    console.log(data)
                     setLoading(false)
                     setOutcomes(data)
                 })
@@ -79,25 +76,24 @@ const EluavateForm = (props) => {
                                             </Label>
                                             <Input
                                                 id="hinhthuc"
-                                                disabled={props.edit}
                                                 value={props.hinhthuc}
                                                 onChange={e => props.setHinhthuc(e.target.value)}
                                                 fullWidth
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                                 disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                             />
                                         </div>
                                         <div className="mt-2">
-                                            <Label for="congcu_kt">
-                                                Công cụ KT
+                                            <Label for="nhom">
+                                                Phân nhóm
                                             </Label>
                                             <Input
-                                                id="congcu_kt"
-                                                value={props.congcu_kt}
-                                                onChange={e => props.setCongcuKT(e.target.value)}
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                                id="nhom"
+                                                value={props.phanloai}
+                                                onChange={e => props.setPhanloai(e.target.value)}
                                                 fullWidth
                                                 disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                             />
                                         </div>
                                         <div className="mt-2">
@@ -108,24 +104,37 @@ const EluavateForm = (props) => {
                                                 id="thoidiem"
                                                 value={props.thoidiem}
                                                 onChange={e => props.setThoidiem(e.target.value)}
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                                 fullWidth
                                                 disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                            />
+                                        </div>
+                                        <div className="mt-2">
+                                            <Label for="congcu_kt">
+                                                Công cụ KT
+                                            </Label>
+                                            <Input
+                                                id="congcu_kt"
+                                                value={props.congcu_kt}
+                                                onChange={e => props.setCongcuKT(e.target.value)}
+                                                fullWidth
+                                                disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                             />
                                         </div>
                                         <div className="mt-2">
                                             <Label for="cdr">
                                                 Chuẩn đầu ra
                                             </Label>
-                                            <div className="row">
+                                            <div>
                                                 {outcomes.map(ele => (
                                                     <FormControlLabel
+                                                        key={ele.cdr}
                                                         control={
                                                             <Checkbox
+                                                                onChange={e => handleChange(e, ele)}
                                                                 name={ele.cdr}
-                                                                data={ele}
                                                                 color="primary"
-                                                                onChange={e => onCheck(e, ele)}
                                                             />
                                                         }
                                                         label={ele.cdr}
@@ -143,14 +152,14 @@ const EluavateForm = (props) => {
                                                 type="number"
                                                 value={props.tile}
                                                 onChange={e => props.setTile(e.target.value)}
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                                 fullWidth
                                                 disableUnderline
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                             />
                                         </div>
                                         <div className="mt-2">
                                             <Label for="noidung">
-                                                Nội dung
+                                                Nội Dung
                                             </Label>
                                             <Input
                                                 id="noidung"
@@ -164,7 +173,9 @@ const EluavateForm = (props) => {
                                                 multiline
                                             />
                                         </div>
-                                    </>}
+
+                                    </>
+                            }
                         </div>
                         <div className="detail-form__footer">
                             <Button
@@ -186,8 +197,8 @@ const EluavateForm = (props) => {
                         </div>
                     </>
             }
-        </div >
-    </Drawer >
+        </div>
+    </Drawer>
 }
 
-export default EluavateForm
+export default EvualateForm
