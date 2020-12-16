@@ -9,7 +9,7 @@ import LoadingRows from "../../common/LoadingRows"
 import CreateNew from "../CreateNew"
 import ErrorRow from "../../common/ErrorRow"
 import Row from "./row"
-import EvualateForm from './EvualateForm'
+import EvualateForm from './evualateForm'
 import EmptyRow from "../../common/EmptyRow"
 
 const CourseEvualate = ({ mamh }) => {
@@ -26,7 +26,6 @@ const CourseEvualate = ({ mamh }) => {
 
     const evualates = useSelector(state => state.course[mamh].evualate)
     const data = useSelector(state => state.course[mamh].evualate.data)
-    console.log(data)
     const dispatch = useDispatch()
 
     const fetch = () => {
@@ -56,13 +55,13 @@ const CourseEvualate = ({ mamh }) => {
             chuandaura: cdr
         })
             .then(() => {
-                fetch()
                 setCreate(false)
                 setLoading(false)
                 setResponse({
                     status: "success",
                     message: `Tạo đánh giá thành công!`
                 })
+                fetch()
             })
             .catch(err => {
                 setLoading(false)
@@ -96,6 +95,7 @@ const CourseEvualate = ({ mamh }) => {
             header="Tạo đánh giá"
             open={create}
             setClose={() => setCreate(false)}
+            fetch={fetch}
             mamh={mamh}
             hinhthuc={hinhthuc}
             phanloai={phanloai}
@@ -114,7 +114,7 @@ const CourseEvualate = ({ mamh }) => {
             handleSubmit={handleSubmitCreate}
             loading={loading}
         />
-        <TableContainer className="p-2" component={Paper}>
+        <TableContainer className="light-grey-bg" component={Paper}>
             <CreateNew
                 fetch={fetch}
                 setOpen={setCreate}
@@ -127,36 +127,36 @@ const CourseEvualate = ({ mamh }) => {
             <Table style={{ minWidth: "950px" }}>
                 <TableHead>
                     <TableRow>
-                        <TableCell width="100px" align="center" size="small">
+                        <TableCell width="120px" align="center">
                             Hình thức KT
                     </TableCell>
-                        <TableCell align="center" size="small">
+                        <TableCell align="center">
                             Nội dung
                     </TableCell>
-                        <TableCell width="200px" align="center" size="small">
+                        <TableCell width="150px" align="center">
                             Thời điểm
                     </TableCell>
-                        <TableCell width="150px" align="center" size="small">
+                        <TableCell width="150px" align="center">
                             Công cụ KT
                     </TableCell>
-                        <TableCell width="150px" align="center" size="small">
+                        <TableCell width="150px" align="center">
                             Chuẩn đầu ra KT
                     </TableCell>
-                        <TableCell width="80px" align="center" size="small">
-                            Tỉ lệ
+                        <TableCell width="80px" align="center">
+                            Tỉ lệ (%)
                     </TableCell>
-                        <TableCell></TableCell>
+                        <TableCell width="125px" align="center"></TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
+                <TableBody className="bg-white">
                     {
                         evualates.pending
-                            ? <LoadingRows col={4} />
+                            ? <LoadingRows col={7} />
                             : evualates.error
                                 ? <ErrorRow refresh={fetch} />
                                 : evualates.data && data.length !== 0
                                     ? data.map(row => (
-                                        <Row setResponse={setResponse} data={row} mamh={mamh} key={row.muctieu} />
+                                        <Row setResponse={setResponse} fetch={fetch} data={row} mamh={mamh} key={row.muctieu} />
                                     ))
                                     : <EmptyRow
                                         header="Chưa có đánh giá"

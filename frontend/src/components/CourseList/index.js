@@ -41,8 +41,13 @@ const CourseList = () => {
     const filteredCourseList = !courseList.data
         ? []
         : courseList.data.filter(course => (
-            removeAccents(course.tenmh).toLowerCase()
-                .includes(removeAccents(filter.tenmh).toLowerCase()) &&
+            (
+                removeAccents(course.tenmh).toLowerCase()
+                    .includes(removeAccents(filter.tenmh).toLowerCase()) ||
+                removeAccents(course.mamh).toLowerCase()
+                    .includes(removeAccents(filter.mamh).toLowerCase())
+            )
+            &&
             course.bomon.includes(filter.bomon) &&
             course.phanloai.includes(filter.phanloai) &&
             course.sotinchi.toString().includes(filter.sotinchi)

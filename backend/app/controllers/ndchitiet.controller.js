@@ -8,7 +8,10 @@ const noidungchitiet = Models.noidungchitiet
 /* Xem noi dung */
 exports.read = function (req, res) {
     noidungchitiet.findAll({
-        include: ndchitiet_cdr
+        include: ndchitiet_cdr,
+        where: {
+            ma_monhoc: req.params.mamh
+        }
     })
         .then(data => {
             data = data.map(danhgia => ({
@@ -17,7 +20,8 @@ exports.read = function (req, res) {
                 nd_trenlop: danhgia.nd_trenlop,
                 nd_onha: danhgia.nd_onha,
                 chuandaura: danhgia.ndchitiet_cdrs.map(cdr => ({
-                    ma_cdr: cdr.ma_cdr,
+                    muctieu: cdr.ma_muctieu,
+                    cdr: cdr.ma_cdr,
                     trenlop_onha: cdr.trenlop_onha
                 }))
             }))
@@ -31,7 +35,7 @@ exports.create = async function (req, res) {
     const t = await sequelize.transaction()
     try {
         const chuandaura = req.body.chuandaura.map(cdr => ({
-            ma_cdr: cdr.ma_cdr,
+            ma_cdr: cdr.cdr,
             ma_muctieu: cdr.muctieu,
             ma_monhoc: req.params.mamh,
             chuong: req.body.chuong,
@@ -45,6 +49,7 @@ exports.create = async function (req, res) {
             nd_onha: req.body.nd_onha
         })
         await ndchitiet_cdr.bulkCreate(chuandaura)
+        return res.sendStatus(200)
     }
     catch (err) {
         await t.rollback();
@@ -56,13 +61,23 @@ exports.create = async function (req, res) {
 exports.update = async function (req, res) {
     const t = await sequelize.transaction()
     try {
-        const cdr_moi = req.body.chuandaura.add.map(cdr => ({
-            ma_cdr: cdr.ma_cdr,
-            ma_muctieu: cdr.muctieu,
-            ma_monhoc: req.params.mamh,
-            chuong: req.body.chuong,
-            trenlop_onha: cdr.trenlop_onha
-        }))
+        await ndchitiet_cdr.destroy({
+            where: {
+                ma_monhoc: req.params.mamh,
+                chuong: req.body.chuong
+            }
+        })
+        const cdr_moi = req.body.chuandaura.map(cdr => {
+            return ({
+                ma_cdr: cdr.cdr,
+                ma_muctieu: cdr.muctieu,
+                ma_monhoc: req.params.mamh,
+                chuong: req.body.chuong,
+                trenlop_onha: cdr.trenlop_onha
+            })
+        })
+        await ndchitiet_cdr.bulkCreate(cdr_moi)
+        console.log('asdsa')
         //
         await noidungchitiet.update({
             tuan: req.body.tuan,
@@ -75,22 +90,6 @@ exports.update = async function (req, res) {
                 chuong: req.body.chuong
             }
         })
-        //
-        const cdr_xoa = req.body.chuandaura.xoa.map(cdr => ({
-            [Op.and]: [
-                { trenlop_onha: cdr.trenlop_onha },
-                { ma_cdr: cdr.ma_cdr }
-            ]
-        }))
-        await ndchitiet_cdr.destroy({
-            where: {
-                ma_monhoc: req.params.mamh,
-                chuong: req.body.chuong,
-                [Op.or]: cdr_xoa
-            }
-        })
-        //
-        await ndchitiet_cdr.bulkCreate(cdr_moi)
         res.sendStatus(200);
     }
     catch (err) {
@@ -99,14 +98,26 @@ exports.update = async function (req, res) {
     }
 }
 
-exports.delete = function (req, res) {
-    noidungchitiet.destroy({
-        where: {
-            id: req.params.cdr,
-            ma_monhoc: req.params.mamh,
-            ma_muctieu: req.params.muctieu
-        }
-    })
-        .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).send(err))
+exports.delete = async function (req, res) {
+    const t = await sequelize.transaction()
+    try {
+        await ndchitiet_cdr.destroy({
+            where: {
+                ma_monhoc: req.params.mamh,
+                chuong: req.body.chuong
+            }
+        })
+        await noidungchitiet.destroy({
+            where: {
+                ma_monhoc: req.params.mamh,
+                chuong: req.body.chuong
+            }
+        })
+        console.log("OK")
+        return res.sendStatus(200)
+    }
+    catch (err) {
+        await t.rollback();
+        res.status(500).send(err);
+    }
 }

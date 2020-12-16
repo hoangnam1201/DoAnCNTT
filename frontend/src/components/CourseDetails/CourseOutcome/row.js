@@ -16,6 +16,14 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
     const [desc, setDesc] = useState(data.mota)
     const [cdio, setCdio] = useState(data.cdio)
 
+    const handleToggleEdit = () => {
+        setGoal(muctieu)
+        setId(data.cdr)
+        setDesc(data.mota)
+        setCdio(data.cdio)
+        setFlag('EDIT')
+    }
+
     const handleSubmitDelete = async () => {
         setLoading('ROW')
         setFlag('')
@@ -24,14 +32,14 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                 fetch()
                 setResponse({
                     status: "success",
-                    message: "Xóa môn học thành công"
+                    message: "Xóa CĐR thành công"
                 })
             })
             .catch(err => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: "Xóa môn học thất bại"
+                    message: "Xóa CĐR thất bại"
                 })
             })
     }
@@ -49,7 +57,7 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                 setLoading(false)
                 setResponse({
                     status: "success",
-                    message: "Chỉnh sửa môn học thành công!"
+                    message: "Chỉnh sửa CĐR thành công!"
                 })
                 fetch()
             })
@@ -57,7 +65,7 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: `Chỉnh sửa môn học thất bại ${ErrorHelper(err)}`
+                    message: `Chỉnh sửa CĐR thất bại ${ErrorHelper(err)}`
                 })
             })
     }
@@ -107,7 +115,7 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
                     <div className="action-button">
                         <IconButton
                             className="text-primary p-2"
-                            onClick={() => setFlag("EDIT")}
+                            onClick={handleToggleEdit}
                         >
                             <AiOutlineEdit size="24px" />
                         </IconButton>

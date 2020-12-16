@@ -1,7 +1,7 @@
 import { Button, Checkbox, Drawer, FormControlLabel, Input } from "@material-ui/core";
 import styled from "styled-components";
 import { LoadingOverlayDiv } from "../../common/LoadingOverlay";
-import { getCourseGoalList, getCourseOutcomeList } from "../../../api/CourseAPI";
+import { getCourseOutcomeList } from "../../../api/CourseAPI";
 import { ErrorHelper } from "../../../utils";
 import { useEffect, useState } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
@@ -20,8 +20,7 @@ const EvualateForm = props => {
             props.setCdr(props.cdr.concat(data))
         }
         else {
-            props.setCdr(props.cdr.filter(ele => ele !== data))
-
+            props.setCdr(props.cdr.filter(ele => ele.cdr !== data.cdr))
         }
     }
 
@@ -29,7 +28,7 @@ const EvualateForm = props => {
         if (props.open) {
             setLoading(true)
             getCourseOutcomeList(props.mamh)
-                .then(data => {
+                .then(async (data) => {
                     setLoading(false)
                     setOutcomes(data)
                 })
@@ -63,10 +62,10 @@ const EvualateForm = props => {
                                             style={{ fontSize: "25px" }}
                                             className="section-title-color font-weight-bold m-0 mb-1"
                                         >
-                                            Chưa có mục tiêu
+                                            Chưa có chuẩn đầu ra
                                         </h3>
                                         <p className="text-secondary">
-                                            Vui lòng tạo mục tiêu mới!
+                                            Vui lòng tạo chuẩn đầu ra mới!
                                         </p>
                                     </div>
                                     : <>
@@ -75,6 +74,7 @@ const EvualateForm = props => {
                                                 Hình thức
                                             </Label>
                                             <Input
+                                                disabled={props.edit}
                                                 id="hinhthuc"
                                                 value={props.hinhthuc}
                                                 onChange={e => props.setHinhthuc(e.target.value)}
@@ -131,6 +131,7 @@ const EvualateForm = props => {
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
+                                                                checked={props.cdr.find(cdrEle => cdrEle.cdr === ele.cdr)}
                                                                 onChange={e => onCheck(e, ele)}
                                                                 name={ele.cdr}
                                                                 color="primary"
@@ -166,9 +167,12 @@ const EvualateForm = props => {
                                                 id="noidung"
                                                 value={props.noidung}
                                                 onChange={e => props.setNoidung(e.target.value)}
+                                                rows={10}
+                                                rowsMax={255}
+                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
                                                 fullWidth
                                                 disableUnderline
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                                multiline
                                             />
                                         </div>
                                     </>

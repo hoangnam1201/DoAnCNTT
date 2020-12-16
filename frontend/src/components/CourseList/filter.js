@@ -1,6 +1,7 @@
 import { Button, IconButton, Input, InputAdornment, Popover, Tooltip } from '@material-ui/core'
 import { useState } from 'react'
-import { BiFilter, BiSearch } from 'react-icons/bi'
+import { BiSearch } from 'react-icons/bi'
+import { BsFilter } from 'react-icons/bs'
 import { IoMdRefresh } from 'react-icons/io'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
@@ -42,10 +43,16 @@ const FilterBar = (props) => {
         style={{ minWidth: "920px" }}
         className="d-flex pl-2 justify-content-between align-items-center"
     >
-        <div className="d-flex align-items-center">
+        <div className="flex-fill d-flex align-items-center mr-4">
+            <button
+                onClick={handleFilterClick}
+                className="btn text-secondary p-0 mr-3"
+            >
+                <BsFilter size="35px" />
+            </button>
             <Input
                 disableUnderline
-                placeholder="Tên môn học"
+                placeholder="Tìm kiếm theo tên hoặc mã môn học"
                 startAdornment={
                     <InputAdornment position="start">
                         <BiSearch />
@@ -53,14 +60,8 @@ const FilterBar = (props) => {
                 }
                 className="form-control rounded-pill"
                 value={filter.tenmh}
-                onChange={e => setFilter({ ...filter, tenmh: e.target.value })}
+                onChange={e => setFilter({ ...filter, mamh: e.target.value, tenmh: e.target.value })}
             />
-            <button
-                onClick={handleFilterClick}
-                className="btn text-secondary p-0 ml-2"
-            >
-                <BiFilter size="35px" />
-            </button>
             <Popover
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}

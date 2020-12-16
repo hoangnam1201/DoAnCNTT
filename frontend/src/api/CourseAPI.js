@@ -76,10 +76,24 @@ export const createCourseEvualate = (mamh, data) => {
     return http.post(`/monhoc/${mamh}/danhgia`, data)
 }
 
-export const updateCourseEvualate = (mamh, hinhthuc, stt, data) => {
-    return http.put(`/monhoc/${mamh}/danhgia/?ht=${hinhthuc}&stt=${stt}`, data)
+export const updateCourseEvualate = (mamh, data) => {
+    return http.put(`/monhoc/${mamh}/danhgia`, data)
 }
 
-export const deleteCourseEvualate = (mamh, hinhthuc, stt) => {
-    return http.delete(`/monhoc/${mamh}/danhgia/?ht=${hinhthuc}&stt=${stt}`)
+export const deleteCourseEvualate = (mamh, hinhthuc) => {
+    return http.delete(`/monhoc/${mamh}/danhgia/${hinhthuc}`)
+}
+
+//Noi dung
+export const getCourseContent = mamh => {
+    return http.get(`/monhoc/${mamh}/noidung`).then(res => res.data)
+}
+export const createCourseContent = (mamh, data) => {
+    return http.post(`/monhoc/${mamh}/noidung`, data)
+}
+export const updateCourseContent = (mamh, data) => {
+    return http.put(`/monhoc/${mamh}/noidung`, data)
+}
+export const deleteCourseContent = (mamh, data) => {
+    return http.post(`/monhoc/${mamh}/noidung/delete`, data)
 }

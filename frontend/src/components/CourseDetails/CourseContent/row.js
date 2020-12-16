@@ -1,153 +1,191 @@
-import { Card, CardActions, CardContent, CardHeader, Dialog, IconButton, Snackbar, TableCell, TableRow } from "@material-ui/core"
-import { Alert, AlertTitle } from "@material-ui/lab"
+import { IconButton, Table, TableCell, TableRow } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsTrash } from "react-icons/bs"
-import { useDispatch } from "react-redux"
-import { updateCourseContent, deleteCourseContent } from "../../../services"
-import { deleteContentSuccess, updateContentSuccess } from "../../../store/actions/courseContent.action"
-import { LoadingCellOverlay } from "../../StatelessComponents"
+import { deleteCourseContent, updateCourseContent } from "../../../api/CourseAPI"
 import ContentForm from "./contentForm"
+import ConfirmDeleteForm from "../../common/ConfirmDeleteForm"
+import { LoadingOverlayCell } from "../../common/LoadingOverlay";
+import styled from "styled-components"
+import { ErrorHelper } from "../../../utils"
 
+const Header = styled.div`
+    font-size:15px;
+`
 
-const Row = ({ row, mamh }) => {
+const Row = ({ data, mamh, fetch, setResponse }) => {
     const [loading, setLoading] = useState(false)
     const [flag, setFlag] = useState('')
-    const [tuan,setTuan] = useState(row.tuan)
-    const [chuong, setChuong] = useState(row.chuong)
-    const [nd_trenlop, setNd_trenlop] = useState(row.nd_trenlop)
-    const [nd_onha, setNd_onha] = useState(row.nd_onha)
-    const [outcome, setOutcome] = useState(row.outcome)
+    const [tuan, setTuan] = useState('')
+    const [chuong, setChuong] = useState('')
+    const [ndgd_trenlop, setNdgd_trenlop] = useState('')
+    const [PPGD, setPPGD] = useState('')
+    const [nd_onha, setNd_onha] = useState('')
+    const [cdr, setCdr] = useState([])
 
-    const dispatch = useDispatch()
+    const handleToggleEdit = () => {
+        setTuan(data.tuan)
+        setChuong(data.chuong)
+        setNdgd_trenlop(data.nd_trenlop.split('=====')[0])
+        setPPGD(data.nd_trenlop.split('=====')[1])
+        setNd_onha(data.nd_onha)
+        setCdr(data.chuandaura)
+        setFlag('EDIT')
+    }
 
     const handleSubmitDelete = async () => {
-        setLoading(true)
+        setLoading('ROW')
         setFlag('')
-        deleteCourseContent(mamh, row.outcome)
+        deleteCourseContent(mamh, { chuong: data.chuong })
             .then(() => {
-                dispatch(deleteContentSuccess(mamh, row.outcome))
+                fetch()
+                setResponse({
+                    status: "success",
+                    message: "Xóa nội dung thành công"
+                })
             })
             .catch(err => {
                 setLoading(false)
+                setResponse({
+                    status: "error",
+                    message: "Xóa nội dung thất bại"
+                })
             })
     }
 
-/*     const handleSubmitEdit = async () => {
-        setLoading(true)
-        const data = {
-            tuan: tuan,
-            noidung: noidung,
-            cdr_hp: cdr_hp
+    const handleSubmitEdit = async () => {
+        setLoading('FORM')
+        const updateData = {
+            tuan,
+            chuong,
+            nd_trenlop: ndgd_trenlop + '=====' + PPGD,
+            nd_onha,
+            chuandaura: cdr
         }
-        updateCourseContent(mamh, row.outcome, data)
+        updateCourseContent(mamh, updateData)
             .then(() => {
-                dispatch(updateContentSuccess(mamh, row.outcome, data))
                 setLoading(false)
-                setFlag({
+                setResponse({
                     status: "success",
-                    message: `Chỉnh sửa noi dung ${outcome} thành công!`
+                    message: "Chỉnh sửa đánh giá thành công!"
                 })
+                fetch()
             })
             .catch(err => {
                 setLoading(false)
-                setFlag({
+                setResponse({
                     status: "error",
-                    message: `Chỉnh sửa nội dung ${outcome} thất bại!`
+                    message: `Chỉnh sửa đánh giá thất bại ${ErrorHelper(err)}`
                 })
             })
     }
- */
+
     const handleToggleDelete = () => {
         setFlag('ConfirmDelete')
     }
 
     return (
         <>
-            <Snackbar
-                open={flag.status}
-                onClose={() => setFlag('')}
-            >
-                <Alert
-                    onClose={() => setFlag('')}
-                    severity={flag.status}
-                    className="mx-3 mb-3"
-                    style={{ minWidth: "250px" }}
-                >
-                    <AlertTitle className="text-capitalize font-weight-bold">
-                        {flag.status}
-                    </AlertTitle>
-                    {flag.message}
-                </Alert>
-            </Snackbar>
-{/*             <ContentForm
-                header={`Chỉnh sửa nội dung ${row.tuan}`}
+            <ContentForm
+                edit
+                header={`Chỉnh sửa đánh giá`}
+                loading={loading === 'FORM'}
                 open={flag === "EDIT"}
                 setClose={() => setFlag("")}
-                tuan = {tuan}
-                noidung = {noidung}
-                cdr_hp = {cdr_hp}
-                setTuan = {setTuan}
-                setNoidung ={setNoidung}
-                setCdr_hp = {setCdr_hp}
-                loading={loading}
+                mamh={mamh}
+                tuan={tuan}
+                chuong={chuong}
+                nd_onha={nd_onha}
+                ndgd_trenlop={ndgd_trenlop}
+                PPGD={PPGD}
+                cdr={cdr}
+                setTuan={setTuan}
+                setChuong={setChuong}
+                setNd_onha={setNd_onha}
+                setNdgd_trenlop={setNdgd_trenlop}
+                setPPGD={setPPGD}
+                setCdr={setCdr}
                 handleSubmit={handleSubmitEdit}
+
             />
- */}            <Dialog open={(flag === 'ConfirmDelete')} onClose={() => setFlag('')}>
-                <Card className="p-3">
-                    <CardHeader
-                        disableTypography
-                        title={`Xóa nội dung`}
-                        className="page-title primary-logo-color"
-                    />
-                    <CardContent>
-                        Xác nhận nội dung {row.tuan}
-                        <span className="font-weight-bold font-italic">
-                            {row.tenmh}
-                        </span>.
-                    </CardContent>
-                    <CardActions>
-                        <button
-                            onClick={handleSubmitDelete}
-                            className="btn btn-block btn-danger"
-                        >
-                            Xóa
-                    </button>
-                        <button
-                            onClick={() => setFlag('')}
-                            className="btn btn-block btn-light"
-                        >
-                            Hủy
-                    </button>
-                    </CardActions>
-                </Card>
-            </Dialog>
-            <TableRow style={{ transform: "scale(1)" }}>     
-                <TableCell className="break-line" style={{ verticalAlign: 'top' }} >
-                    {row.tuan}
-                </TableCell>
-                <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                    {row.noidung}
-                </TableCell>
-                <TableCell align="center" style={{ verticalAlign: 'top' }}>
-                    {row.cdr_hp}
-                </TableCell>
-                <TableCell align='center' style={{ verticalAlign: 'top' }} className="px-0">
-                    <IconButton
-                        className="text-primary p-2"
-                        onClick={() => setFlag('EDIT')}
-                    >
-                        <AiOutlineEdit size="24px" />
-                    </IconButton>
-                    <IconButton
-                        className="text-danger p-2"
-                        onClick={handleToggleDelete}
-                    >
-                        <BsTrash size="24px" />
-                    </IconButton>
-                </TableCell>
-                {loading && <LoadingCellOverlay />}
-            </TableRow>
+            <ConfirmDeleteForm
+                open={(flag === 'ConfirmDelete')}
+                onClose={() => setFlag('')}
+                onSubmit={handleSubmitDelete}
+                label="Đánh giá"
+                warning="Xóa đánh giá vĩnh viễn. Không thể khôi phục."
+                name={data.chuong}
+            />
+            <>
+                <TableRow hover style={{ transform: "scale(1)" }}>
+                    <TableCell className="border-right" align="center">
+                        {data.tuan}
+                    </TableCell>
+                    <TableCell colSpan={2} className="center border-right p-0">
+                        <Table>
+                            <TableRow>
+                                <TableCell className="border-right">
+                                    <strong>{data.chuong}</strong>
+                                </TableCell>
+                                <TableCell width="200px" align="center" ></TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="border-right">
+                                    <Header className="mb-3">
+                                        <strong><em>Tóm tắt các ND và PPGD chính trên lớp:</em></strong>
+                                    </Header>
+                                    <div className="mt-2 pl-1">
+                                        <strong>Nội dung giáo dục chính trên lớp:</strong>
+                                    </div>
+                                    <div className="break-line pl-1">
+                                        {data.nd_trenlop.split('=====')[0]}
+                                    </div>
+                                    <div className="mt-2 pl-1">
+                                        <strong>Tóm tắt các PPGD chính:</strong>
+                                    </div>
+                                    <div className="break-line pl-1">
+                                        {data.nd_trenlop.split('=====')[1]}
+                                    </div>
+                                </TableCell>
+                                <TableCell align="center" className="break-line">
+                                    {data.chuandaura.filter(cdr => cdr.trenlop_onha === 'tl').map(ele => ele.cdr).join('\n')}
+                                </TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="border-right">
+                                    <Header className="mb-2">
+                                        <strong><em>B/ Các nội dung cần tự học tại nhà:</em></strong>
+                                    </Header>
+                                    <div className="break-line pl-1">
+                                        {data.nd_onha}
+                                    </div>
+                                </TableCell>
+                                <TableCell align="center" className="break-line">
+                                    {data.chuandaura.filter(cdr => cdr.trenlop_onha === 'on').map(ele => ele.cdr).join('\n')}
+                                </TableCell>
+
+                            </TableRow>
+                        </Table>
+                    </TableCell>
+                    <TableCell align='center' className="px-0">
+                        <div className="action-button">
+                            <IconButton
+                                className="text-primary p-2"
+                                onClick={handleToggleEdit}
+                            >
+                                <AiOutlineEdit size="24px" />
+                            </IconButton>
+                            <IconButton
+                                className="text-danger p-2"
+                                onClick={handleToggleDelete}
+                            >
+                                <BsTrash size="24px" />
+                            </IconButton>
+                        </div>
+                    </TableCell>
+                    {loading === 'ROW' && <LoadingOverlayCell />}
+                </TableRow>
+            </>
         </>
     )
 }

@@ -22,11 +22,11 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     nd_trenlop: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TEXT,
       allowNull: true
     },
     nd_onha: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TEXT,
       allowNull: true
     }
   }, {

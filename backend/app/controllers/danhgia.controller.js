@@ -20,7 +20,10 @@ exports.read = async function (req, res) {
                     hinhthuc: danhgia.hinhthuc
                 }
             })
-            chuandaura = chuandaura.map(cdr => cdr.ma_cdr)
+            chuandaura = chuandaura.map(cdr => ({
+                muctieu: cdr.ma_muctieu,
+                cdr: cdr.ma_cdr
+            }))
             return ({
                 hinhthuc: danhgia.hinhthuc,
                 phanloai: danhgia.phanloai,
@@ -70,14 +73,21 @@ exports.create = async function (req, res) {
 exports.update = async function (req, res) {
     const t = await sequelize.transaction()
     try {
-        const cdr_moi = req.body.chuandaura.add.map(cdr => {
+        await danhgia_chuandaura.destroy({
+            where: {
+                ma_monhoc: req.params.mamh,
+                hinhthuc: req.body.hinhthuc
+            }
+        })
+        const cdr_moi = req.body.chuandaura.map(cdr => {
             return ({
-                ma_cdr: cdr.ma_cdr,
+                ma_cdr: cdr.cdr,
                 ma_muctieu: cdr.muctieu,
                 ma_monhoc: req.params.mamh,
                 hinhthuc: req.body.hinhthuc
             })
         })
+        await danhgia_chuandaura.bulkCreate(cdr_moi)
         //
         await danhgia.update({
             phanloai: req.body.phanloai,
@@ -90,21 +100,9 @@ exports.update = async function (req, res) {
         }, {
             where: {
                 ma_monhoc: req.params.mamh,
-                hinhthuc: `${req.query.ht}``${req.query.stt}`
+                hinhthuc: req.body.hinhthuc
             }
         })
-        //
-        await danhgia_chuandaura.destroy({
-            where: {
-                ma_monhoc: req.params.mamh,
-                hinhthuc: req.body.hinhthuc,
-                ma_cdr: {
-                    [Op.in]: req.body.chuandaura.delete
-                }
-            }
-        })
-        //
-        await danhgia_chuandaura.bulkCreate(cdr_moi)
         res.sendStatus(200);
     }
     catch (err) {
@@ -114,13 +112,25 @@ exports.update = async function (req, res) {
 }
 
 //
-exports.delete = function (req, res) {
-    danhgia.destroy({
-        where: {
-            ma_monhoc: req.params.mamh,
-            hinhthuc: `${req.query.ht}``${req.query.stt}`
-        }
-    })
-        .then(() => res.sendStatus(200))
-        .catch(err => res.status(500).send(err))
+exports.delete = async function (req, res) {
+    const t = await sequelize.transaction()
+    try {
+        await danhgia_chuandaura.destroy({
+            where: {
+                ma_monhoc: req.params.mamh,
+                hinhthuc: req.params.hinhthuc.replace('_', "#")
+            }
+        })
+        await danhgia.destroy({
+            where: {
+                ma_monhoc: req.params.mamh,
+                hinhthuc: req.params.hinhthuc.replace('_', "#")
+            }
+        })
+        return res.sendStatus(200)
+    }
+    catch (err) {
+        await t.rollback();
+        res.status(500).send(err);
+    }
 }

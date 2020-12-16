@@ -30,10 +30,12 @@ router.delete('/:mamh/chuandaura/:muctieu/:cdr', cdrController.delete)
 router.get('/:mamh/danhgia', danhgiaController.read)
 router.post('/:mamh/danhgia', danhgiaController.create)
 router.put('/:mamh/danhgia', danhgiaController.update)
+router.delete('/:mamh/danhgia/:hinhthuc', danhgiaController.delete)
 
 /* Noi dung chi tiet */
 router.get('/:mamh/noidung', noidungController.read)
 router.post('/:mamh/noidung', noidungController.create)
 router.put('/:mamh/noidung', noidungController.update)
+router.post('/:mamh/noidung/delete', noidungController.delete)
 
 module.exports = router;

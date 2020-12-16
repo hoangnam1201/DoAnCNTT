@@ -2,56 +2,70 @@ import { IconButton, TableCell, TableRow } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
 import { BsTrash } from "react-icons/bs"
-import { deleteCourseEvualate, deleteCourseOutcome, updateCourseOutcome } from "../../../api/CourseAPI"
+import { deleteCourseEvualate, updateCourseEvualate } from "../../../api/CourseAPI"
 import { ErrorHelper } from "../../../utils"
 import ConfirmDeleteForm from "../../common/ConfirmDeleteForm"
 import { LoadingOverlayCell } from "../../common/LoadingOverlay"
+import EvualateForm from "./evualateForm"
 
 const Row = ({ data, mamh, fetch, setResponse }) => {
     const [loading, setLoading] = useState(false)
     const [flag, setFlag] = useState('')
-    const [hinhthuc, setHinhthuc] = useState('')
-    const [phanloai, setPhanloai] = useState('')
-    const [noidung, setNoidung] = useState('')
-    const [thoidiem, setThoidiem] = useState('')
-    const [congcu_kt, setCongcuKT] = useState('')
-    const [tile, setTile] = useState('')
-    const [cdr, setCdr] = useState([])
+    const [hinhthuc, setHinhthuc] = useState(data.hinhthuc)
+    const [phanloai, setPhanloai] = useState(data.phanloai)
+    const [noidung, setNoidung] = useState(data.noidung)
+    const [thoidiem, setThoidiem] = useState(data.thoidiem)
+    const [congcu_kt, setCongcuKT] = useState(data.congcu_kt)
+    const [tile, setTile] = useState(data.tile)
+    const [cdr, setCdr] = useState(data.chuandaura)
+
+    const handleToggleEdit = () => {
+        setHinhthuc(data.hinhthuc)
+        setPhanloai(data.phanloai)
+        setNoidung(data.noidung)
+        setThoidiem(data.thoidiem)
+        setCongcuKT(data.congcu_kt)
+        setCdr(data.chuandaura)
+        setFlag('EDIT')
+    }
 
     const handleSubmitDelete = async () => {
         setLoading('ROW')
         setFlag('')
-        deleteCourseEvualate(mamh)
+        deleteCourseEvualate(mamh, data.hinhthuc.replace('#', '_'))
             .then(() => {
-                fetch()
                 setResponse({
                     status: "success",
-                    message: "Xóa môn học thành công"
+                    message: "Xóa đánh giá thành công"
                 })
+                fetch()
             })
             .catch(err => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: "Xóa môn học thất bại"
+                    message: "Xóa đánh giá thất bại"
                 })
             })
     }
 
-/*     const handleSubmitEdit = async () => {
+    const handleSubmitEdit = async () => {
         setLoading('FORM')
         const updateData = {
-            cdr: id,
-            ma_muctieu: goal,
-            mota: desc,
-            cdio
+            hinhthuc,
+            thoidiem,
+            phanloai,
+            noidung,
+            congcu_kt,
+            tile,
+            chuandaura: cdr
         }
-        updateCourseOutcome(mamh, muctieu, data.cdr, updateData)
+        updateCourseEvualate(mamh, updateData)
             .then(() => {
                 setLoading(false)
                 setResponse({
                     status: "success",
-                    message: "Chỉnh sửa môn học thành công!"
+                    message: "Chỉnh sửa đánh giá thành công!"
                 })
                 fetch()
             })
@@ -59,10 +73,10 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
                 setLoading(false)
                 setResponse({
                     status: "error",
-                    message: `Chỉnh sửa môn học thất bại ${ErrorHelper(err)}`
+                    message: `Chỉnh sửa đánh giá thất bại ${ErrorHelper(err)}`
                 })
             })
-    } */
+    }
 
     const handleToggleDelete = () => {
         setFlag('ConfirmDelete')
@@ -70,16 +84,39 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
 
     return (
         <>
+            <EvualateForm
+                edit
+                header={`Chỉnh sửa đánh giá ${data.hinhthuc}`}
+                loading={loading === 'FORM'}
+                open={flag === "EDIT"}
+                setClose={() => setFlag("")}
+                mamh={mamh}
+                hinhthuc={hinhthuc}
+                phanloai={phanloai}
+                noidung={noidung}
+                thoidiem={thoidiem}
+                congcu_kt={congcu_kt}
+                cdr={cdr}
+                tile={tile}
+                setHinhthuc={setHinhthuc}
+                setPhanloai={setPhanloai}
+                setNoidung={setNoidung}
+                setThoidiem={setThoidiem}
+                setCongcuKT={setCongcuKT}
+                setCdr={setCdr}
+                setTile={setTile}
+                handleSubmit={handleSubmitEdit}
+            />
             <ConfirmDeleteForm
                 open={(flag === 'ConfirmDelete')}
                 onClose={() => setFlag('')}
                 onSubmit={handleSubmitDelete}
-                label="Chuẩn đầu ra"
-                warning="Xóa chuẩn đầu ra vĩnh viễn. Không thể khôi phục."
-                name={data.cdr}
+                label="Đánh giá"
+                warning="Xóa đánh giá vĩnh viễn. Không thể khôi phục."
+                name={data.hinhthuc}
             />
             <>
-                <TableRow hover>
+                <TableRow hover style={{ transform: "scale(1)" }}>
                     <TableCell align="center">
                         {data.hinhthuc}
                     </TableCell>
@@ -93,7 +130,7 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
                         {data.congcu_kt}
                     </TableCell>
                     <TableCell align="center" >
-                        {data.chuandaura.join(' ')}
+                        {data.chuandaura.map(ele => ele.cdr).join(', ')}
                     </TableCell>
                     <TableCell align="center" >
                         {data.tile}
@@ -102,13 +139,13 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
                         <div className="action-button">
                             <IconButton
                                 className="text-primary p-2"
-                                onClick={() => setFlag("EDIT")}
+                                onClick={handleToggleEdit}
                             >
                                 <AiOutlineEdit size="24px" />
                             </IconButton>
                             <IconButton
                                 className="text-danger p-2"
-                            //onClick={handleToggleDelete}
+                                onClick={handleToggleDelete}
                             >
                                 <BsTrash size="24px" />
                             </IconButton>

@@ -12,7 +12,10 @@ import {
     FETCH_COURSE_EVUALATE_FAIL,
     FETCH_COURSE_EVUALATE_SUCCESS,
     FETCH_COURSE_EVUALATE_PENDING,
-    UPDATE_COURSE_GOAL_SUCCESS
+    UPDATE_COURSE_GOAL_SUCCESS,
+    FETCH_COURSE_CONTENT_PENDING,
+    FETCH_COURSE_CONTENT_SUCCESS,
+    FETCH_COURSE_CONTENT_FAIL
 }
     from '../constants/ActionTypes'
 
@@ -153,6 +156,30 @@ const courseDetailReducer = (state = {}, action) => {
             }
             return course
         //CONTENT
+        case FETCH_COURSE_CONTENT_PENDING:
+            course = { ...state }
+            course[action.payload].content = {
+                ...course[action.payload].content,
+                pending: true,
+                error: ''
+            }
+            return course
+        case FETCH_COURSE_CONTENT_SUCCESS:
+            course = { ...state }
+            course[action.payload.mamh].content = {
+                ...course[action.payload.mamh].content,
+                pending: false,
+                data: action.payload.data
+            }
+            return course
+        case FETCH_COURSE_CONTENT_FAIL:
+            course = { ...state }
+            course[action.payload.mamh].content = {
+                ...course[action.payload.mamh].content,
+                pending: false,
+                error: action.payload.error
+            }
+            return course
         default:
             return state
     }

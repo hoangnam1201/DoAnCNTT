@@ -46,7 +46,6 @@ const LoginPage = () => {
         setLoading(true)
         try {
             const res = await loginCall({ username, password })
-            console.log(res)
             if (res.status === 200) {
                 dispatch(login(res.data))
             }
