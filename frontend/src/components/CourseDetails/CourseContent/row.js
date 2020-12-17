@@ -147,7 +147,7 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
                                         {data.nd_trenlop.split('=====')[1]}
                                     </div>
                                 </TableCell>
-                                <TableCell align="center" className="break-line">
+                                <TableCell style={{ minWidth: "200px" }} width="200px" align="center" className="break-line">
                                     {data.chuandaura.filter(cdr => cdr.trenlop_onha === 'tl').map(ele => ele.cdr).join('\n')}
                                 </TableCell>
                             </TableRow>

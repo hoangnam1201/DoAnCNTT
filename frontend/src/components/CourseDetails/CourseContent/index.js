@@ -44,7 +44,7 @@ const CourseContent = ({ mamh }) => {
         setLoading(true)
         createCourseContent(mamh, {
             tuan,
-            chuong,
+            chuong: chuong.trim(),
             nd_trenlop: ndgd_trenlop + '=====' + PPGD,
             nd_onha,
             chuandaura: cdr

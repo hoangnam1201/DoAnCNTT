@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@material-ui/core"
 import { Skeleton } from "@material-ui/lab"
 
 const LoadingCell = () => (
-    <TableCell><Skeleton animation="wave" /></TableCell>
+    <TableCell><Skeleton height="13px" className="my-1" animation="wave"  /></TableCell>
 )
 
 const LoadingRow = ({ col }) => (

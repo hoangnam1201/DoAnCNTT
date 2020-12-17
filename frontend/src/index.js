@@ -33,7 +33,7 @@ const theme = createMuiTheme({
     },
     MuiTableCell: {
       root: {
-        padding: "10px"
+        padding: "7px 10px"
       },
       body: {
         fontSize: 14,

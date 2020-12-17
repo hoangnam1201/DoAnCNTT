@@ -28,7 +28,7 @@ const Appbar = () => {
             })
     }
 
-/*     useEffect(() => {
+    useEffect(() => {
         const handleClickOutside = e => {
             if (menuRef && !menuRef.current.contains(e.target)) {
                 setUserMenuToggle(false)
@@ -36,7 +36,7 @@ const Appbar = () => {
         }
         document.addEventListener('click', handleClickOutside)
         return () => document.removeEventListener('click', handleClickOutside)
-    }, []) */
+    }, [])
 
     return (
         <div className="appbar">

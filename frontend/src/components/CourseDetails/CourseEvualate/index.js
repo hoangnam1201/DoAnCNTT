@@ -12,6 +12,12 @@ import Row from "./row"
 import EvualateForm from './evualateForm'
 import EmptyRow from "../../common/EmptyRow"
 
+const CountRate = (data) => {
+    return data.reduce((acc, cur) => {
+        return acc + parseInt(cur.tile)
+    }, 0)
+}
+
 const CourseEvualate = ({ mamh }) => {
     const [create, setCreate] = useState(false)
     const [hinhthuc, setHinhthuc] = useState('')
@@ -25,7 +31,17 @@ const CourseEvualate = ({ mamh }) => {
     const [response, setResponse] = useState('')
 
     const evualates = useSelector(state => state.course[mamh].evualate)
-    const data = useSelector(state => state.course[mamh].evualate.data)
+    let data = useSelector(state => state.course[mamh].evualate.data)
+    if (data && data.length > 0) {
+        data = data.reduce((acc, cur) => {
+            const newValue = { ...acc }
+            if (!acc.hasOwnProperty(cur.phanloai)) {
+                newValue[cur.phanloai] = []
+            }
+            newValue[cur.phanloai].push({ ...cur })
+            return newValue
+        }, {})
+    }
     const dispatch = useDispatch()
 
     const fetch = () => {
@@ -46,7 +62,7 @@ const CourseEvualate = ({ mamh }) => {
     const handleSubmitCreate = () => {
         setLoading(true)
         createCourseEvualate(mamh, {
-            hinhthuc,
+            hinhthuc: hinhthuc.trim(),
             phanloai,
             noidung,
             thoidiem,
@@ -97,6 +113,7 @@ const CourseEvualate = ({ mamh }) => {
             setClose={() => setCreate(false)}
             fetch={fetch}
             mamh={mamh}
+            groups={(!data || data.length === 0) ? [] : Object.keys(data)}
             hinhthuc={hinhthuc}
             phanloai={phanloai}
             noidung={noidung}
@@ -155,8 +172,28 @@ const CourseEvualate = ({ mamh }) => {
                             : evualates.error
                                 ? <ErrorRow refresh={fetch} />
                                 : evualates.data && data.length !== 0
-                                    ? data.map(row => (
-                                        <Row setResponse={setResponse} fetch={fetch} data={row} mamh={mamh} key={row.muctieu} />
+                                    ? Object.keys(data).map(phanloai => (
+                                        <>
+                                            <TableRow>
+                                                <TableCell className="text-center border-right" colSpan={4}>
+                                                    <strong>{phanloai}</strong>
+                                                </TableCell>
+                                                <TableCell className="border-right"></TableCell>
+                                                <TableCell className="text-center">
+                                                    <strong>{CountRate(data[phanloai])}</strong>
+                                                </TableCell>
+                                                <TableCell></TableCell>
+                                            </TableRow>
+                                            {data[phanloai].map(row => (
+                                                <Row
+                                                    setResponse={setResponse}
+                                                    fetch={fetch}
+                                                    data={row}
+                                                    mamh={mamh}
+                                                    key={row.muctieu}
+                                                    groups={(!data || data.length === 0) ? [] : Object.keys(data)} />
+                                            ))}
+                                        </>
                                     ))
                                     : <EmptyRow
                                         header="Chưa có đánh giá"

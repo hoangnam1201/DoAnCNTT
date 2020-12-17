@@ -1,19 +1,43 @@
-import { Button, Checkbox, Drawer, FormControlLabel, Input } from "@material-ui/core";
+import { Button, Checkbox, Drawer, FormControlLabel, IconButton, Input, InputAdornment, Menu, MenuItem, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
 import { LoadingOverlayDiv } from "../../common/LoadingOverlay";
 import { getCourseOutcomeList } from "../../../api/CourseAPI";
 import { ErrorHelper } from "../../../utils";
 import { useEffect, useState } from "react";
 import { AiOutlineWarning } from "react-icons/ai";
+import { IoIosArrowDropdown } from "react-icons/io";
 
 const Label = styled.label`
     font-size:13px;
     font-weight:600;
 `
 
+const GroupWrapper = styled.div`
+    font-size:14px;
+    text-overflow:ellipsis;
+    overflow:hidden;
+    white-space:nowrap;
+    width:220px;
+    padding:5px;
+`
+
 const EvualateForm = props => {
     const [loading, setLoading] = useState(false)
     const [outcomes, setOutcomes] = useState(null)
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
+    const handleItemClick = (value) => {
+        props.setPhanloai(value)
+        setAnchorEl(null);
+    }
 
     const onCheck = (e, data) => {
         if (e.target.checked) {
@@ -88,12 +112,45 @@ const EvualateForm = props => {
                                                 Phân loại
                                             </Label>
                                             <Input
+                                                className="grey-200-bg border p-0 rounded"
                                                 id="phanloai"
                                                 value={props.phanloai}
                                                 onChange={e => props.setPhanloai(e.target.value)}
                                                 fullWidth
                                                 disableUnderline
-                                                inputProps={{ className: "grey-200-bg border p-2 rounded" }}
+                                                inputProps={{ className: "p-2" }}
+                                                endAdornment={
+                                                    <InputAdornment position="end">
+                                                        <div>
+                                                            <Tooltip title="Chọn nhóm đã có" placement="bottom-end">
+                                                                <IconButton
+                                                                    onClick={handleClick}
+                                                                    disabled={props.groups.length === 0}
+                                                                >
+                                                                    <IoIosArrowDropdown />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                            <Menu
+                                                                anchorOrigin={{
+                                                                    vertical: 'bottom',
+                                                                    horizontal: 'left',
+                                                                }}
+                                                                anchorEl={anchorEl}
+                                                                open={Boolean(anchorEl)}
+                                                                onClose={handleClose}
+                                                                MenuListProps={{ style: { padding: "0" } }}
+                                                            >
+                                                                {props.groups.map(group => (
+                                                                    <MenuItem className="p-0" onClick={() => handleItemClick(group)}>
+                                                                        <GroupWrapper>
+                                                                            {group}
+                                                                        </GroupWrapper>
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Menu>
+                                                        </div>
+                                                    </InputAdornment>
+                                                }
                                             />
                                         </div>
                                         <div className="mt-2">

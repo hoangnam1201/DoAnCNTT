@@ -8,7 +8,7 @@ import ConfirmDeleteForm from "../../common/ConfirmDeleteForm"
 import { LoadingOverlayCell } from "../../common/LoadingOverlay"
 import EvualateForm from "./evualateForm"
 
-const Row = ({ data, mamh, fetch, setResponse }) => {
+const Row = ({ data, mamh, fetch, setResponse, groups }) => {
     const [loading, setLoading] = useState(false)
     const [flag, setFlag] = useState('')
     const [hinhthuc, setHinhthuc] = useState(data.hinhthuc)
@@ -91,6 +91,7 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
                 open={flag === "EDIT"}
                 setClose={() => setFlag("")}
                 mamh={mamh}
+                groups={groups}
                 hinhthuc={hinhthuc}
                 phanloai={phanloai}
                 noidung={noidung}
@@ -117,22 +118,22 @@ const Row = ({ data, mamh, fetch, setResponse }) => {
             />
             <>
                 <TableRow hover style={{ transform: "scale(1)" }}>
-                    <TableCell align="center">
+                    <TableCell align="center" className="border-right">
                         {data.hinhthuc}
                     </TableCell>
-                    <TableCell className="break-line" >
+                    <TableCell className="break-line border-right" >
                         {data.noidung}
                     </TableCell>
-                    <TableCell align="center" >
+                    <TableCell align="center" className="border-right">
                         {data.thoidiem}
                     </TableCell>
-                    <TableCell align="center" >
+                    <TableCell align="center" className="border-right">
                         {data.congcu_kt}
                     </TableCell>
-                    <TableCell align="center" >
-                        {data.chuandaura.map(ele => ele.cdr).join(', ')}
+                    <TableCell align="center" className="break-line border-right">
+                        {data.chuandaura.map(ele => ele.cdr).join('\n')}
                     </TableCell>
-                    <TableCell align="center" >
+                    <TableCell align="center" className="border-right">
                         {data.tile}
                     </TableCell>
                     <TableCell align='center' className="px-0">
