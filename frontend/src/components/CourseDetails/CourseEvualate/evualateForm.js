@@ -241,7 +241,7 @@ const EvualateForm = props => {
                                 color="primary"
                                 variant="contained"
                                 onClick={props.handleSubmit}
-                                disabled={!props.hinhthuc || !props.noidung || !props.congcu_kt || !props.thoidiem || !props.tile}
+                                disabled={!props.hinhthuc || !props.tile}
                             >
                                 {props.edit ? "Chỉnh sửa" : "Tạo mới"}
                             </Button>

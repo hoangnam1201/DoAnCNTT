@@ -19,7 +19,8 @@ const OutcomeForm = (props) => {
             setLoading(true)
             getCourseGoalList(props.mamh)
                 .then(data => {
-                    props.setGoal(data[0])
+                    if (!props.edit)
+                        props.setGoal(data[0])
                     setLoading(false)
                     setGoals(data)
                 })
