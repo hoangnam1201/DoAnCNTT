@@ -39,10 +39,11 @@ const CourseOutcome = ({ mamh }) => {
 
     const handleSubmitCreate = () => {
         setLoading(true)
-        createCourseOutcome(mamh, goal, {
+        createCourseOutcome(mamh, {
             cdr: ID,
             mota: desc,
-            cdio
+            muctieu: goal,
+            cdio: cdio.split(' ')
         })
             .then(() => {
                 fetch()

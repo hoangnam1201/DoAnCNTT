@@ -1,5 +1,3 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('monhoc', {
@@ -9,7 +7,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true
     },
     ten: {
-      type: DataTypes.STRING(25),
+      type: DataTypes.TEXT,
       allowNull: false,
       unique: "monhoc_ten_key"
     },
@@ -18,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     },
     mota: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.TEXT,
       allowNull: true
     },
     ma_bomon: {
@@ -32,11 +30,20 @@ module.exports = function(sequelize, DataTypes) {
     phanloai: {
       type: DataTypes.STRING(15),
       allowNull: false
+    },
+    ma_montienquyet: {
+      type: DataTypes.STRING(15),
+      allowNull: true,
+      references: {
+        model: 'monhoc',
+        key: 'id'
+      }
     }
   }, {
     sequelize,
     tableName: 'monhoc',
     schema: 'public',
+    hasTrigger: true,
     timestamps: false,
     indexes: [
       {

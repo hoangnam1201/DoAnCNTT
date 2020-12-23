@@ -27,7 +27,7 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
     const handleSubmitDelete = async () => {
         setLoading('ROW')
         setFlag('')
-        deleteCourseOutcome(mamh, muctieu, data.cdr)
+        deleteCourseOutcome(mamh, data.cdr)
             .then(() => {
                 fetch()
                 setResponse({
@@ -48,11 +48,11 @@ const Row = ({ data, mamh, muctieu, fetch, setResponse }) => {
         setLoading('FORM')
         const updateData = {
             cdr: id,
-            ma_muctieu: goal,
+            muctieu: goal,
             mota: desc,
-            cdio
+            cdio: cdio.split(' ')
         }
-        updateCourseOutcome(mamh, muctieu, data.cdr, updateData)
+        updateCourseOutcome(mamh, data.cdr, updateData)
             .then(() => {
                 setLoading(false)
                 setResponse({

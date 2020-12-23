@@ -1,5 +1,3 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('chuandaura', {
@@ -11,7 +9,6 @@ module.exports = function(sequelize, DataTypes) {
     ma_muctieu: {
       type: DataTypes.STRING(10),
       allowNull: false,
-      primaryKey: true,
       references: {
         model: 'muctieu',
         key: 'ma_monhoc'
@@ -29,10 +26,6 @@ module.exports = function(sequelize, DataTypes) {
     mota: {
       type: DataTypes.STRING(255),
       allowNull: false
-    },
-    cdio: {
-      type: DataTypes.STRING(15),
-      allowNull: false
     }
   }, {
     sequelize,
@@ -41,11 +34,10 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: false,
     indexes: [
       {
-        name: "pk_chuandaura",
+        name: "chuandaura_pkey",
         unique: true,
         fields: [
           { name: "id" },
-          { name: "ma_muctieu" },
           { name: "ma_monhoc" },
         ]
       },

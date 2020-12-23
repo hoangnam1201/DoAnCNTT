@@ -1,6 +1,7 @@
 import { Divider, IconButton, Paper } from "@material-ui/core"
 import { useState } from "react"
 import { AiOutlineEdit } from "react-icons/ai"
+import { useSelector } from "react-redux"
 import styled from "styled-components"
 import { updateCourse } from "../../../api/CourseAPI"
 import { ErrorHelper } from "../../../utils"
@@ -32,6 +33,10 @@ const CourseInfo = ({ course }) => {
     const [bomon, setBomon] = useState(course.bomon)
     const [phanloai, setPhanloai] = useState(course.phanloai)
     const [mota, setMota] = useState(course.mota)
+    const [montienquyet, setMontienquyet] = useState(null)
+    const [monhoctruoc, setMonhoctruoc] = useState([])
+
+    const courseList = useSelector(state => state.courses.data)
 
     const handleToggleEdit = () => {
         setTenmh(course.tenmh)
@@ -39,6 +44,8 @@ const CourseInfo = ({ course }) => {
         setBomon(course.bomon)
         setPhanloai(course.phanloai)
         setMota(course.mota)
+        setMontienquyet(courseList.find(_course => _course.tenmh === course.montienquyet))
+        setMonhoctruoc(course.monhoctruoc.map(_course => courseList.find(__course => __course.tenmh === _course)))
         setEdit(true)
     }
 
@@ -46,7 +53,9 @@ const CourseInfo = ({ course }) => {
         setLoading(true)
         updateCourse(course.mamh, {
             tenmh, sotinchi, phanloai, mota,
-            mabomon: boMonParser[bomon]
+            mabomon: boMonParser[bomon],
+            montienquyet: montienquyet ? montienquyet.mamh : null,
+            monhoctruoc: monhoctruoc.map(_monhoctruoc => _monhoctruoc.mamh)
         })
             .then(() => {
                 alert("Chỉnh sửa môn học thành công!")
@@ -73,11 +82,16 @@ const CourseInfo = ({ course }) => {
                 bomon={bomon}
                 phanloai={phanloai}
                 mota={mota}
+                montienquyet={montienquyet}
+                monhoctruoc={monhoctruoc}
                 setTenmh={setTenmh}
                 setTc={setSotinchi}
                 setBomon={setBomon}
                 setPhanloai={setPhanloai}
                 setMota={setMota}
+                setMontienquyet={setMontienquyet}
+                setMonhoctruoc={setMonhoctruoc}
+                courseList={courseList}
             />
             <div className="px-3 light-grey-bg py-2 d-flex flex-wrap align-items-center justify-content-between">
                 <Header>
@@ -109,6 +123,14 @@ const CourseInfo = ({ course }) => {
                     <ContentRow
                         label="Phân loại"
                         content={course.phanloai}
+                    />
+                    <ContentRow
+                        label="Môn tiên quyết"
+                        content={course.montienquyet || "Không"}
+                    />
+                    <ContentRow
+                        label="Môn học trước"
+                        content={course.monhoctruoc.length !== 0 ? course.monhoctruoc.join(', ') : "Không"}
                     />
                     <ContentRow
                         label="Mô tả"

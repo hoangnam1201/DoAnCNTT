@@ -39,12 +39,12 @@ const EvualateForm = props => {
         setAnchorEl(null);
     }
 
-    const onCheck = (e, data) => {
+    const onCheck = (e, cdr) => {
         if (e.target.checked) {
-            props.setCdr(props.cdr.concat(data))
+            props.setCdr(props.cdr.concat(cdr))
         }
         else {
-            props.setCdr(props.cdr.filter(ele => ele.cdr !== data.cdr))
+            props.setCdr(props.cdr.filter(_cdr => cdr !== _cdr))
         }
     }
 
@@ -184,17 +184,17 @@ const EvualateForm = props => {
                                                 Chuẩn đầu ra
                                             </Label>
                                             <div className="row">
-                                                {outcomes.map(ele => (
+                                                {outcomes.map(_cdr => (
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
-                                                                checked={props.cdr.find(cdrEle => cdrEle.cdr === ele.cdr)}
-                                                                onChange={e => onCheck(e, ele)}
-                                                                name={ele.cdr}
+                                                                checked={props.cdr.find(Cdr => Cdr === _cdr)}
+                                                                onChange={e => onCheck(e, _cdr)}
+                                                                name={_cdr}
                                                                 color="primary"
                                                             />
                                                         }
-                                                        label={ele.cdr}
+                                                        label={_cdr}
                                                         className="m-0 col-6"
                                                     />
 

@@ -7,6 +7,7 @@ import { createCourse } from "../../api/CourseAPI"
 import { CreateCourseForm } from "./form"
 import { Alert, AlertTitle } from '@material-ui/lab'
 import { ErrorHelper } from "../../utils"
+import { useSelector } from "react-redux"
 
 const CreateCourse = () => {
     const initialPostingState = {
@@ -24,7 +25,11 @@ const CreateCourse = () => {
     const [phanloai, setPhanloai] = useState('')
     const [mota, setMota] = useState('')
     const [bomon, setBomon] = useState('')
+    const [montienquyet, setMontienquyet] = useState(null)
+    const [monhoctruoc, setMonhoctruoc] = useState([])
     const [posting, setPosting] = useState(initialPostingState)
+
+    const courseList = useSelector(state => state.courses.data)
 
     const clearAllState = () => {
         setMamh('')
@@ -33,6 +38,8 @@ const CreateCourse = () => {
         setPhanloai('')
         setMota('')
         setBomon('')
+        setMontienquyet(null)
+        setMonhoctruoc([])
     }
 
     const [errors, setErrors] = useState({
@@ -68,7 +75,9 @@ const CreateCourse = () => {
             return
         setPosting({ ...initialPostingState, isPosting: true })
         const data = {
-            mamh, tenmh, sotinchi, phanloai, bomon, mota
+            mamh, tenmh, sotinchi, phanloai, bomon, mota,
+            montienquyet: montienquyet ? montienquyet.mamh : null,
+            monhoctruoc: monhoctruoc.map(monhoctruoc => monhoctruoc.mamh)
         }
         try {
             await createCourse(data)
@@ -146,7 +155,8 @@ const CreateCourse = () => {
                     props={{
                         mamh, setMamh, tenmh, setTenmh, sotinchi, setsotinchi,
                         phanloai, setPhanloai, mota, setMota, bomon, setBomon,
-                        errors, setErrors
+                        errors, setErrors, montienquyet, setMontienquyet, monhoctruoc,
+                        setMonhoctruoc, courseList
                     }}
                 />
             </CardContent>

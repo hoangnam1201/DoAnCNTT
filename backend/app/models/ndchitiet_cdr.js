@@ -1,8 +1,6 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  var ndchitiet_cdr = sequelize.define('ndchitiet_cdr', {
+  return sequelize.define('ndchitiet_cdr', {
     ma_monhoc: {
       type: DataTypes.STRING(15),
       allowNull: false,
@@ -13,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     chuong: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
       allowNull: false,
       primaryKey: true,
       references: {
@@ -32,16 +30,7 @@ module.exports = function(sequelize, DataTypes) {
       primaryKey: true,
       references: {
         model: 'chuandaura',
-        key: 'ma_muctieu'
-      }
-    },
-    ma_muctieu: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'chuandaura',
-        key: 'ma_muctieu'
+        key: 'ma_monhoc'
       }
     }
   }, {
@@ -58,11 +47,8 @@ module.exports = function(sequelize, DataTypes) {
           { name: "chuong" },
           { name: "trenlop_onha" },
           { name: "ma_cdr" },
-          { name: "ma_muctieu" },
         ]
       },
     ]
   });
-  ndchitiet_cdr.removeAttribute('id');
-  return ndchitiet_cdr;
 };

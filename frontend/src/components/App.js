@@ -13,9 +13,29 @@ import LoadingPageLogo from './common/LoadingPageLogo'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '../store/actions/account.action'
 import { verifyToken } from '../api/UserAPI'
+import { fetchCourses } from '../store/actions/courses.action'
 
-const MainPage = () => (
-  <div className="wrapper">
+const MainPage = () => {
+  const dispatch = useDispatch()
+  const courseList = useSelector(state => state.courses)
+
+  useEffect(() => {
+    if (!courseList.data)
+      dispatch(fetchCourses())
+  }, [dispatch, courseList.data])
+
+  const refresh = () => {
+    if (!courseList.loading)
+      dispatch(fetchCourses())
+  }
+
+  if (!courseList.data) {
+    return <Route path='/'>
+      <LoadingPageLogo />
+    </Route>
+  }
+
+  return <div className="wrapper">
     <Sidebar class="persist" />
     <Appbar />
     <div className="content">
@@ -29,7 +49,7 @@ const MainPage = () => (
               <CreateCourse />
             </Route>
             <Route exact path="/course">
-              <CourseList />
+              <CourseList courseList={courseList} refresh={refresh} />
             </Route>
             <Route path="/course/:mamh">
               <CourseDetails />
@@ -39,13 +59,14 @@ const MainPage = () => (
       </main>
     </div>
   </div>
-)
+}
 
 const App = () => {
   const dispatch = useDispatch()
 
   const user = useSelector(state => state.account)
   const [verified, setVerified] = useState(false)
+
   useEffect(() => {
     verifyToken()
       .then(res => {

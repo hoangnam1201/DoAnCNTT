@@ -1,7 +1,7 @@
 {
-    "database":"dbtgtc66t4jdp7",
-    "username":"oymolftiztiefl",
-    "password":"940f499718420c5b7e02c4b6256c01ef9580a9ec82fc61f1c5fcb34d67b29995",
-    "host":"ec2-34-200-106-49.compute-1.amazonaws.com",
+    "database":"dcij8t61j1j57l",
+    "username":"axeymsbuffqobc",
+    "password":"8c28ce3d62d2760cc90499661c6b80305e725ef609e580c52e1c468c3f09e24c",
+    "host":"ec2-34-194-198-238.compute-1.amazonaws.com",
     "dialect":"postgresql"
 }

@@ -55,16 +55,16 @@ export const getCourseOutcome = mamh => {
 export const getCourseOutcomeList = mamh => {
     return http.get(`/monhoc/${mamh}/chuandaura/list`).then(res => res.data)
 }
-export const createCourseOutcome = (mamh, muctieu, data) => {
-    return http.post(`/monhoc/${mamh}/chuandaura/${muctieu}`, data)
+export const createCourseOutcome = (mamh, data) => {
+    return http.post(`/monhoc/${mamh}/chuandaura`, data)
 }
 
-export const updateCourseOutcome = (mamh, muctieu, outcome, data) => {
-    return http.put(`/monhoc/${mamh}/chuandaura/${muctieu}/${outcome}`, data)
+export const updateCourseOutcome = (mamh, outcome, data) => {
+    return http.put(`/monhoc/${mamh}/chuandaura/${outcome}`, data)
 }
 
-export const deleteCourseOutcome = (mamh, muctieu, cdr) => {
-    return http.delete(`/monhoc/${mamh}/chuandaura/${muctieu}/${cdr}`)
+export const deleteCourseOutcome = (mamh, cdr) => {
+    return http.delete(`/monhoc/${mamh}/chuandaura/${cdr}`)
 }
 
 //Danh gia

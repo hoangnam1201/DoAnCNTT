@@ -11,7 +11,10 @@ exports.read = function (req, res) {
         include: ndchitiet_cdr,
         where: {
             ma_monhoc: req.params.mamh
-        }
+        },
+        order: [
+            ['tuan', 'ASC']
+        ]
     })
         .then(data => {
             data = data.map(danhgia => ({
@@ -36,7 +39,6 @@ exports.create = async function (req, res) {
     try {
         const chuandaura = req.body.chuandaura.map(cdr => ({
             ma_cdr: cdr.cdr,
-            ma_muctieu: cdr.muctieu,
             ma_monhoc: req.params.mamh,
             chuong: req.body.chuong,
             trenlop_onha: cdr.trenlop_onha
@@ -49,6 +51,7 @@ exports.create = async function (req, res) {
             nd_onha: req.body.nd_onha
         })
         await ndchitiet_cdr.bulkCreate(chuandaura)
+        await t.commit()
         return res.sendStatus(200)
     }
     catch (err) {
@@ -70,14 +73,12 @@ exports.update = async function (req, res) {
         const cdr_moi = req.body.chuandaura.map(cdr => {
             return ({
                 ma_cdr: cdr.cdr,
-                ma_muctieu: cdr.muctieu,
                 ma_monhoc: req.params.mamh,
                 chuong: req.body.chuong,
                 trenlop_onha: cdr.trenlop_onha
             })
         })
         await ndchitiet_cdr.bulkCreate(cdr_moi)
-        console.log('asdsa')
         //
         await noidungchitiet.update({
             tuan: req.body.tuan,
@@ -90,6 +91,7 @@ exports.update = async function (req, res) {
                 chuong: req.body.chuong
             }
         })
+        await t.commit()
         res.sendStatus(200);
     }
     catch (err) {
@@ -113,7 +115,7 @@ exports.delete = async function (req, res) {
                 chuong: req.body.chuong
             }
         })
-        console.log("OK")
+        await t.commit()
         return res.sendStatus(200)
     }
     catch (err) {

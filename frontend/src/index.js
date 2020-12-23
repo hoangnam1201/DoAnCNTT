@@ -6,6 +6,8 @@ import App from './components/App';
 import { Provider } from 'react-redux';
 import store from './store'
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { viVN } from '@material-ui/core/locale';
+
 
 const theme = createMuiTheme({
   palette: {
@@ -39,7 +41,7 @@ const theme = createMuiTheme({
         fontSize: 14,
         lineHeight: "24px"
       },
-      head:{
+      head: {
         fontSize: 14
       }
     },
@@ -62,9 +64,14 @@ const theme = createMuiTheme({
           visibility: "visible"
         }
       }
+    },
+    MuiTablePagination: {
+      selectIcon: {
+        fontSize: 24,
+      }
     }
   }
-})
+}, viVN)
 
 ReactDOM.render(
   <Router>

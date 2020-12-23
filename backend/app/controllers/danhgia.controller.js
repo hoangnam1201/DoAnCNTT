@@ -1,5 +1,4 @@
 var Models = require('../models')
-const { Op } = require("sequelize")
 const sequelize = require('../config/sequelize')
 
 const danhgia_chuandaura = Models.danhgia_chuandaura
@@ -11,28 +10,17 @@ exports.read = async function (req, res) {
         let data = await danhgia.findAll({
             where: {
                 ma_monhoc: req.params.mamh
-            }
+            },
+            include: danhgia_chuandaura
         })
-        data = await Promise.all(data.map(async (danhgia) => {
-            let chuandaura = await danhgia_chuandaura.findAll({
-                where: {
-                    ma_monhoc: req.params.mamh,
-                    hinhthuc: danhgia.hinhthuc
-                }
-            })
-            chuandaura = chuandaura.map(cdr => ({
-                muctieu: cdr.ma_muctieu,
-                cdr: cdr.ma_cdr
-            }))
-            return ({
-                hinhthuc: danhgia.hinhthuc,
-                phanloai: danhgia.phanloai,
-                noidung: danhgia.noidung,
-                thoidiem: danhgia.thoidiem,
-                congcu_kt: danhgia.congcu_kt,
-                tile: danhgia.tile,
-                chuandaura
-            })
+        data = data.map(danhgia => ({
+            hinhthuc: danhgia.id,
+            phanloai: danhgia.phanloai,
+            noidung: danhgia.noidung,
+            thoidiem: danhgia.thoidiem,
+            congcu_kt: danhgia.congcu_kt,
+            tile: danhgia.tile,
+            chuandaura: danhgia.danhgia_chuandauras.map(cdr => cdr.ma_cdr)
         }))
         return res.status(200).send(data)
     }
@@ -46,14 +34,13 @@ exports.create = async function (req, res) {
     const t = await sequelize.transaction()
     try {
         const chuandaura = req.body.chuandaura.map(cdr => ({
-            ma_cdr: cdr.cdr,
-            ma_muctieu: cdr.muctieu,
+            ma_cdr: cdr,
             ma_monhoc: req.params.mamh,
-            hinhthuc: req.body.hinhthuc
+            ma_danhgia: req.body.hinhthuc
         }))
         await danhgia.create({
             phanloai: req.body.phanloai,
-            hinhthuc: req.body.hinhthuc,
+            id: req.body.hinhthuc,
             noidung: req.body.noidung,
             thoidiem: req.body.thoidiem,
             congcu_kt: req.body.congcu_kt,
@@ -61,6 +48,7 @@ exports.create = async function (req, res) {
             ma_monhoc: req.params.mamh
         })
         await danhgia_chuandaura.bulkCreate(chuandaura)
+        await t.commit()
         res.sendStatus(200);
     }
     catch (err) {
@@ -76,22 +64,21 @@ exports.update = async function (req, res) {
         await danhgia_chuandaura.destroy({
             where: {
                 ma_monhoc: req.params.mamh,
-                hinhthuc: req.body.hinhthuc
+                ma_danhgia: req.body.hinhthuc
             }
         })
         const cdr_moi = req.body.chuandaura.map(cdr => {
             return ({
-                ma_cdr: cdr.cdr,
-                ma_muctieu: cdr.muctieu,
+                ma_cdr: cdr,
                 ma_monhoc: req.params.mamh,
-                hinhthuc: req.body.hinhthuc
+                ma_danhgia: req.body.hinhthuc
             })
         })
         await danhgia_chuandaura.bulkCreate(cdr_moi)
         //
         await danhgia.update({
             phanloai: req.body.phanloai,
-            hinhthuc: req.body.hinhthuc,
+            id: req.body.hinhthuc,
             noidung: req.body.noidung,
             thoidiem: req.body.thoidiem,
             congcu_kt: req.body.congcu_kt,
@@ -100,9 +87,10 @@ exports.update = async function (req, res) {
         }, {
             where: {
                 ma_monhoc: req.params.mamh,
-                hinhthuc: req.body.hinhthuc
+                id: req.body.hinhthuc
             }
         })
+        await t.commit()
         res.sendStatus(200);
     }
     catch (err) {
@@ -118,15 +106,16 @@ exports.delete = async function (req, res) {
         await danhgia_chuandaura.destroy({
             where: {
                 ma_monhoc: req.params.mamh,
-                hinhthuc: req.params.hinhthuc.replace('_', "#")
+                ma_danhgia: req.params.hinhthuc.replace('_', "#")
             }
         })
         await danhgia.destroy({
             where: {
                 ma_monhoc: req.params.mamh,
-                hinhthuc: req.params.hinhthuc.replace('_', "#")
+                id: req.params.hinhthuc.replace('_', "#")
             }
         })
+        await t.commit()
         return res.sendStatus(200)
     }
     catch (err) {

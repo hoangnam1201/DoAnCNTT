@@ -60,6 +60,7 @@ const Row = ({ data, mamh, fetch, setResponse, groups }) => {
             tile,
             chuandaura: cdr
         }
+        console.log(updateData)
         updateCourseEvualate(mamh, updateData)
             .then(() => {
                 setLoading(false)
@@ -131,7 +132,7 @@ const Row = ({ data, mamh, fetch, setResponse, groups }) => {
                         {data.congcu_kt}
                     </TableCell>
                     <TableCell align="center" className="break-line border-right">
-                        {data.chuandaura.map(ele => ele.cdr).join('\n')}
+                        {data.chuandaura.join('\n')}
                     </TableCell>
                     <TableCell align="center" className="border-right">
                         {data.tile}

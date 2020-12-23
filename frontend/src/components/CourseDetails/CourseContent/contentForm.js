@@ -16,12 +16,12 @@ const ContentForm = props => {
     const [loading, setLoading] = useState(false)
     const [outcomes, setOutcomes] = useState(null)
 
-    const onCheck = (e, data, group) => {
+    const onCheck = (e, cdr, group) => {
         if (e.target.checked) {
-            props.setCdr(props.cdr.concat({ ...data, trenlop_onha: group }))
+            props.setCdr(props.cdr.concat({ cdr, trenlop_onha: group }))
         }
         else {
-            props.setCdr(props.cdr.filter(ele => ele.trenlop_onha !== group || ele.cdr !== data.cdr))
+            props.setCdr(props.cdr.filter(ele => ele.trenlop_onha !== group || ele.cdr !== cdr))
         }
     }
 
@@ -134,17 +134,17 @@ const ContentForm = props => {
                                                 Chuẩn đầu ra nội dung trên lớp
                                             </Label>
                                             <div className="row">
-                                                {outcomes.map(ele => (
+                                                {outcomes.map(_cdr => (
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
-                                                                checked={props.cdr.find(cdr => cdr.trenlop_onha === "tl" && cdr.cdr === ele.cdr)}
-                                                                onChange={e => onCheck(e, ele, "tl")}
-                                                                name={ele.cdr}
-                                                                color="primary" 
+                                                                checked={props.cdr.find(cdr => cdr.trenlop_onha === "tl" && cdr.cdr === _cdr)}
+                                                                onChange={e => onCheck(e, _cdr, "tl")}
+                                                                name={_cdr}
+                                                                color="primary"
                                                             />
                                                         }
-                                                        label={ele.cdr}
+                                                        label={_cdr}
                                                         className="m-0 col-6"
                                                     />
 
@@ -173,17 +173,17 @@ const ContentForm = props => {
                                                 Chuẩn đầu ra nội dung ở nhà
                                             </Label>
                                             <div className="row">
-                                                {outcomes.map(ele => (
+                                                {outcomes.map(_cdr => (
                                                     <FormControlLabel
                                                         control={
                                                             <Checkbox
-                                                                checked={props.cdr.find(cdr => cdr.trenlop_onha === "on" && cdr.cdr === ele.cdr)}
-                                                                onChange={e => onCheck(e, ele, "on")}
-                                                                name={ele.cdr}
+                                                                checked={props.cdr.find(cdr => cdr.trenlop_onha === "on" && cdr.cdr === _cdr)}
+                                                                onChange={e => onCheck(e, _cdr, "on")}
+                                                                name={_cdr}
                                                                 color="primary"
                                                             />
                                                         }
-                                                        label={ele.cdr}
+                                                        label={_cdr}
                                                         className="m-0 col-6"
                                                     />
 

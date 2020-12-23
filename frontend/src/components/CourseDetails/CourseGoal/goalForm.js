@@ -38,19 +38,6 @@ const GoalForm = props => {
                     />
                 </div>
                 <div className="mt-2">
-                    <Label for="outcome">
-                        Chuẩn đầu ra CTĐT
-                    </Label>
-                    <Input
-                        id="outcome"
-                        value={props.outcome}
-                        onChange={e => props.setOutcome(e.target.value)}
-                        fullWidth
-                        disableUnderline
-                        inputProps={{ className: "grey-200-bg border p-2 rounded" }}
-                    />
-                </div>
-                <div className="mt-2">
                     <Label for="desc">
                         Mô tả
                     </Label>
@@ -72,7 +59,7 @@ const GoalForm = props => {
                     color="primary"
                     variant="contained"
                     onClick={props.handleSubmit}
-                    disabled={!props.id || !props.desc || !props.outcome}
+                    disabled={!props.id || !props.desc}
                 >
                     {props.edit ? "Chỉnh sửa" : "Tạo mới"}
                 </Button>

@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-module.exports = function (sequelize, DataTypes) {
+module.exports = function(sequelize, DataTypes) {
   return sequelize.define('danhgia_chuandaura', {
     ma_monhoc: {
       type: DataTypes.STRING(15),
@@ -10,13 +10,13 @@ module.exports = function (sequelize, DataTypes) {
         key: 'ma_monhoc'
       }
     },
-    hinhthuc: {
-      type: DataTypes.TEXT,
+    ma_danhgia: {
+      type: DataTypes.STRING(25),
       allowNull: false,
       primaryKey: true,
       references: {
         model: 'danhgia',
-        key: 'hinhthuc'
+        key: 'ma_monhoc'
       }
     },
     ma_cdr: {
@@ -25,16 +25,7 @@ module.exports = function (sequelize, DataTypes) {
       primaryKey: true,
       references: {
         model: 'chuandaura',
-        key: 'ma_muctieu'
-      }
-    },
-    ma_muctieu: {
-      type: DataTypes.STRING(10),
-      allowNull: false,
-      primaryKey: true,
-      references: {
-        model: 'chuandaura',
-        key: 'ma_muctieu'
+        key: 'ma_monhoc'
       }
     }
   }, {
@@ -48,9 +39,8 @@ module.exports = function (sequelize, DataTypes) {
         unique: true,
         fields: [
           { name: "ma_monhoc" },
-          { name: "hinhthuc" },
+          { name: "ma_danhgia" },
           { name: "ma_cdr" },
-          { name: "ma_muctieu" },
         ]
       },
     ]

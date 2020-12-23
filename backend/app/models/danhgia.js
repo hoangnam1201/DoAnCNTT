@@ -1,9 +1,7 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
-module.exports = function (sequelize, DataTypes) {
-  var danhgia = sequelize.define('danhgia', {
-    hinhthuc: {
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('danhgia', {
+    id: {
       type: DataTypes.STRING(25),
       allowNull: false,
       primaryKey: true
@@ -35,7 +33,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     phanloai: {
       type: DataTypes.TEXT,
-      allowNull: false
+      allowNull: true
     }
   }, {
     sequelize,
@@ -47,12 +45,10 @@ module.exports = function (sequelize, DataTypes) {
         name: "danhgia_pkey",
         unique: true,
         fields: [
+          { name: "id" },
           { name: "ma_monhoc" },
-          { name: "hinhthuc" },
         ]
       },
     ]
   });
-  danhgia.removeAttribute('id');
-  return danhgia;
 };

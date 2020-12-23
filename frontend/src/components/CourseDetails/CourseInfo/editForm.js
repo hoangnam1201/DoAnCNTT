@@ -1,4 +1,5 @@
-import { Button, Drawer, Input } from "@material-ui/core";
+import { Button, Drawer, Input, TextField } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import styled from "styled-components";
 import { LoadingOverlayDiv } from "../../common/LoadingOverlay";
 
@@ -85,6 +86,45 @@ const EditForm = (props) => {
                         <option>Tùy chọn</option>
                         <option>Bắt buộc</option>
                     </select>
+                </div>
+                <div className="mt-2">
+                    <Label>
+                        Môn tiên quyết
+                    </Label>
+                    <Autocomplete
+                        value={props.montienquyet}
+                        noOptionsText="Không có kết quả."
+                        renderInput={(params) =>
+                            <TextField
+                                {...params}
+                                variant="outlined"
+                                className="grey-200-bg"
+                            />}
+                        options={props.courseList}
+                        getOptionLabel={option => option.tenmh}
+                        onChange={(event, newValue) => props.setMontienquyet(newValue)}
+                        size="small"
+                    />
+                </div>
+                <div className="mt-2">
+                    <Label>
+                        Môn học trước
+                    </Label>
+                    <Autocomplete
+                        multiple
+                        value={props.monhoctruoc}
+                        noOptionsText="Không có kết quả."
+                        renderInput={(params) =>
+                            <TextField
+                                {...params}
+                                variant="outlined"
+                                className="grey-200-bg"
+                            />}
+                        options={props.courseList}
+                        getOptionLabel={option => option.tenmh}
+                        onChange={(event, newValue) => props.setMonhoctruoc(newValue)}
+                        size="small"
+                    />
                 </div>
                 <div className="mt-2">
                     <Label for="desc">

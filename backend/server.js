@@ -22,7 +22,7 @@ app.use(cookieParser())
 //Route
 app.use('/api', appRoute)
 
-
+app.use(express.static('build'));
 
 
 app.get('/*', (req, res) => {

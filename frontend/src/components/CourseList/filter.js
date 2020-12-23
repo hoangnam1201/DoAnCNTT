@@ -26,28 +26,56 @@ const Title = styled.p`
 
 const FilterBar = (props) => {
     const [anchorEl, setAnchorEl] = useState(null)
-    const initialFilter = props.initialFilter
-    const filter = props.filter
-    const setFilter = props.setFilter
-    const [sotinchi, setSotinchi] = useState('')
-    const [bomon, setBomon] = useState('')
-    const [phanloai, setPhanloai] = useState('')
 
-    const handleFilterClick = e => {
-        setAnchorEl(e.currentTarget)
-        setSotinchi(filter.sotinchi)
-        setBomon(filter.bomon)
-        setPhanloai(filter.phanloai)
+    const handleChangeSearch = e => {
+        props.setFilter({
+            ...props.filter,
+            mamh: e.target.value,
+            tenmh: e.target.value
+        })
+        props.setPage(0)
     }
+
+    const handleChangeSotinchi = e => {
+        props.setFilter({
+            ...props.filter,
+            sotinchi: e.target.value
+        })
+        props.setPage(0)
+    }
+
+    const handleChangeBomon = e => {
+        props.setFilter({
+            ...props.filter,
+            bomon: e.target.value
+        })
+        props.setPage(0)
+    }
+
+    const handleChangePhanloai = e => {
+        props.setFilter({
+            ...props.filter,
+            phanloai: e.target.value
+        })
+        props.setPage(0)
+    }
+
+    const handleChangeCdio = e => {
+        props.setFilter({
+            ...props.filter,
+            cdio: e.target.value
+        })
+        props.setPage(0)
+    }
+
     return <div
         style={{ minWidth: "920px" }}
         className="d-flex pl-2 justify-content-between align-items-center"
     >
         <div className="flex-fill d-flex align-items-center mr-4">
             <button
-                onClick={handleFilterClick}
-                className="btn text-secondary p-0 mr-3"
-            >
+                onClick={e => setAnchorEl(e.currentTarget)}
+                className="btn text-secondary p-0 mr-3">
                 <BsFilter size="35px" />
             </button>
             <Input
@@ -59,8 +87,8 @@ const FilterBar = (props) => {
                     </InputAdornment>
                 }
                 className="form-control rounded-pill"
-                value={filter.tenmh}
-                onChange={e => setFilter({ ...filter, mamh: e.target.value, tenmh: e.target.value })}
+                value={props.filter.tenmh}
+                onChange={handleChangeSearch}
             />
             <Popover
                 open={Boolean(anchorEl)}
@@ -74,22 +102,24 @@ const FilterBar = (props) => {
                             <InputLabel>Số tín chỉ</InputLabel>
                             <Select
                                 className='bg-light form-control'
-                                value={sotinchi}
-                                onChange={e => setSotinchi(e.target.value)}
+                                value={props.filter.sotinchi}
+                                onChange={handleChangeSotinchi}
                             >
                                 <option selected value="">Tất cả</option>
                                 <option>1</option>
                                 <option>2</option>
                                 <option>3</option>
                                 <option>4</option>
+                                <option>5</option>
+                                <option>6</option>
                             </Select>
                         </div>
                         <div className="mb-2">
                             <InputLabel>Bộ môn</InputLabel>
                             <Select
                                 className='bg-light form-control'
-                                value={bomon}
-                                onChange={e => setBomon(e.target.value)}
+                                value={props.filter.bomon}
+                                onChange={handleChangeBomon}
                             >
                                 <option selected value="">Tất cả</option>
                                 <option>Tin học cơ sở</option>
@@ -102,40 +132,30 @@ const FilterBar = (props) => {
                             <InputLabel>Phân loại</InputLabel>
                             <Select
                                 className='bg-light form-control'
-                                value={phanloai}
-                                onChange={e => setPhanloai(e.target.value)}
+                                value={props.filter.phanloai}
+                                onChange={handleChangePhanloai}
                             >
                                 <option selected value="">Tất cả</option>
                                 <option>Tùy chọn</option>
                                 <option>Bắt buộc</option>
                             </Select>
                         </div>
+                        <div className="mb-2">
+                            <InputLabel for="cdio">CDIO</InputLabel>
+                            <Input
+                                id="cdio"
+                                value={props.filter.cdio}
+                                onChange={handleChangeCdio}
+                                fullWidth
+                                disableUnderline
+                                inputProps={{ className: "bg-light border p-2 rounded" }}
+                            />
+                        </div>
                     </div>
                     <div className="mt-2">
                         <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={() => {
-                                setFilter({
-                                    ...filter,
-                                    sotinchi,
-                                    bomon,
-                                    phanloai
-                                })
-                                setAnchorEl(null)
-                            }}
-                        >
-                            Áp dụng
-                        </Button>
-                        <Button
                             className="ml-2 text-danger"
-                            onClick={() => {
-                                setFilter(initialFilter)
-                                setAnchorEl(null)
-                                setSotinchi('')
-                                setBomon('')
-                                setPhanloai('')
-                            }}
+                            onClick={() => props.setFilter(props.initialFilter)}
                         >
                             Phục hồi
                         </Button>

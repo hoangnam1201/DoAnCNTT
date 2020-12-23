@@ -1,3 +1,5 @@
+import { TextField } from "@material-ui/core"
+import { Autocomplete } from "@material-ui/lab"
 import styled from "styled-components"
 
 const InputLabel = styled.label`
@@ -135,7 +137,7 @@ export const CreateCourseForm = ({ props }) => (
                         className={`${props.errors.phanloai && 'text-danger'}`}
                     >
                         Phân loại
-                            </InputLabel>
+                    </InputLabel>
                     <Select
                         className={`bg-light form-control
                             ${props.errors.phanloai ? ' border-danger' : ''}`}
@@ -150,6 +152,47 @@ export const CreateCourseForm = ({ props }) => (
                 </div>
             </div>
             <div className="form-group col-12 pb-2">
+                <InputLabel for="montienquyet">
+                    Môn tiên quyết
+                </InputLabel>
+                <Autocomplete
+                    value={props.montienquyet}
+                    id="montienquyet"
+                    noOptionsText="Không có kết quả."
+                    renderInput={(params) =>
+                        <TextField
+                            {...params}
+                            variant="outlined"
+                            className="bg-light"
+                        />}
+                    options={props.courseList}
+                    getOptionLabel={option => option.tenmh}
+                    onChange={(event, newValue) => props.setMontienquyet(newValue)}
+                    size="small"
+                />
+            </div>
+            <div className="form-group col-12 pb-2">
+                <InputLabel for="mhtruoc">
+                    Môn học trước
+                </InputLabel>
+                <Autocomplete
+                    value={props.monhoctruoc}
+                    id="mhtruoc"
+                    noOptionsText="Không có kết quả."
+                    multiple
+                    renderInput={(params) =>
+                        <TextField
+                            {...params}
+                            variant="outlined"
+                            className="bg-light"
+                        />}
+                    options={props.courseList}
+                    getOptionLabel={option => option.tenmh}
+                    onChange={(event, newValue) => props.setMonhoctruoc(newValue)}
+                    size="small"
+                />
+            </div>
+            <div className="form-group col-12 pb-2">
                 <InputLabel for="mota">Mô tả (optional)</InputLabel>
                 <TextArea
                     name="mota"
@@ -161,5 +204,5 @@ export const CreateCourseForm = ({ props }) => (
                 />
             </div>
         </FixedWidthForm>
-    </div>
+    </div >
 )

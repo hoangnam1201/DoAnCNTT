@@ -16,7 +16,6 @@ const CourseGoal = ({ mamh }) => {
     const [create, setCreate] = useState(false)
     const [ID, setID] = useState('')
     const [desc, setDesc] = useState('')
-    const [outcome, setOutcome] = useState('')
     const [loading, setLoading] = useState(false)
     const [response, setResponse] = useState('')
 
@@ -31,7 +30,6 @@ const CourseGoal = ({ mamh }) => {
     const handleToggleCreate = () => {
         setID('')
         setDesc('')
-        setOutcome('')
         setCreate(true)
     }
 
@@ -39,8 +37,7 @@ const CourseGoal = ({ mamh }) => {
         setLoading(true)
         createCourseGoal(mamh, {
             muctieu: ID,
-            mota: desc,
-            cdr_ctdt: outcome
+            mota: desc
         }).then(() => {
             fetch()
             setCreate(false)
@@ -84,10 +81,8 @@ const CourseGoal = ({ mamh }) => {
             setClose={() => setCreate(false)}
             id={ID}
             desc={desc}
-            outcome={outcome}
             setId={setID}
             setDesc={setDesc}
-            setOutcome={setOutcome}
             loading={loading}
             handleSubmit={handleSubmitCreate}
         />

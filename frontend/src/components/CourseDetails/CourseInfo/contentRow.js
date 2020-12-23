@@ -4,7 +4,7 @@ const Label = styled.label`
     font-weight:700;
     font-size:13px;
     margin-bottom:0;
-    width:120px;
+    width:150px;
     padding:0 15px;
 `
 
@@ -20,7 +20,7 @@ const ContentRow = ({ label, content }) => (
         <Label className="section-title-color">
             {label}:
         </Label>
-        <Content className="col">
+        <Content className="col break-line">
             {content}
         </Content>
     </div>

@@ -1,5 +1,3 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
   return sequelize.define('muctieu', {
@@ -10,10 +8,6 @@ module.exports = function(sequelize, DataTypes) {
     },
     mota: {
       type: DataTypes.STRING(255),
-      allowNull: false
-    },
-    cdr_ctdt: {
-      type: DataTypes.STRING(15),
       allowNull: false
     },
     ma_monhoc: {

@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { BiShow } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { deleteCourse } from "../../store/actions/courses.action";
 import ConfirmForm from "../common/ConfirmDeleteForm";
 
-const { TableRow, TableCell, IconButton } = require("@material-ui/core");
+const { TableRow, TableCell, IconButton, Tooltip } = require("@material-ui/core");
 const { AiFillInfoCircle } = require("react-icons/ai");
 const { BsTrash } = require("react-icons/bs");
 const { Link } = require("react-router-dom");
@@ -46,6 +47,13 @@ const CourseRow = (props) => {
                 <TableCell align="center">{row.sotinchi}</TableCell>
                 <TableCell>{row.bomon}</TableCell>
                 <TableCell>{row.phanloai}</TableCell>
+                <TableCell align="center">
+                    <Tooltip title={row.chuandaura || "Không có"}>
+                        <IconButton className="p-2">
+                            <BiShow size="24px" />
+                        </IconButton>
+                    </Tooltip>
+                </TableCell>
                 <TableCell align='center'>
                     <IconButton className="p-2 action-button">
                         <Link style={{ lineHeight: "1em" }} to={`/course/${row.mamh}`}>

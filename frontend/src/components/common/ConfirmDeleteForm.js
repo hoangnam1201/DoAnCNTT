@@ -30,7 +30,7 @@ const ConfirmDeleteForm = props => {
                 <small className="mt-3 d-block">
                     {props.label}
                 </small>
-                <p className="mt-1">
+                <p className="mt-1 break-line">
                     {props.name}
                 </p>
             </CardContent>

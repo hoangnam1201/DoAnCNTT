@@ -5,39 +5,34 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { useEffect } from 'react';
-import { Breadcrumbs } from '@material-ui/core';
+import { Breadcrumbs, TableFooter, TablePagination } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import useBreadcrumbs, { routeConfig } from "../../hooks/useBreadcrumbs"
 import { MdKeyboardArrowRight } from 'react-icons/md';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCourses } from '../../store/actions/courses.action';
 import CourseRow from './courseRow';
 import { useState } from 'react';
 import FilterBar from './filter';
 import ErrorRow from '../common/ErrorRow';
 import EmptyRow from '../common/EmptyRow';
 import LoadingRows from '../common/LoadingRows';
+import { removeAccents } from '../../utils'
 
-const removeAccents = str => {
-    return str.normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd').replace(/Đ/g, 'D');
-}
+const CourseList = (props) => {
+    const courseList = props.courseList
 
-
-const CourseList = () => {
     const initialFilter = {
         tenmh: '',
         sotinchi: '',
         bomon: '',
-        phanloai: ''
+        phanloai: '',
+        cdio: ''
     }
 
-    const dispatch = useDispatch()
     const breadcrumbs = useBreadcrumbs(routeConfig)
-    const courseList = useSelector(state => state.courses)
     const [filter, setFilter] = useState(initialFilter)
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(5)
+
     const filteredCourseList = !courseList.data
         ? []
         : courseList.data.filter(course => (
@@ -50,18 +45,10 @@ const CourseList = () => {
             &&
             course.bomon.includes(filter.bomon) &&
             course.phanloai.includes(filter.phanloai) &&
-            course.sotinchi.toString().includes(filter.sotinchi)
+            course.sotinchi.toString().includes(filter.sotinchi) &&
+            filter.cdio.split(' ').every(_cdio => course.chuandaura.includes(_cdio))
         ))
 
-    useEffect(() => {
-        if (!courseList.data)
-            dispatch(fetchCourses())
-    }, [dispatch, courseList.data])
-
-    const refresh = () => {
-        if (!courseList.loading)
-            dispatch(fetchCourses())
-    }
 
     return (
         <>
@@ -83,7 +70,8 @@ const CourseList = () => {
                     filter={filter}
                     setFilter={setFilter}
                     initialFilter={initialFilter}
-                    refresh={refresh}
+                    refresh={props.refresh}
+                    setPage={setPage}
                 />
                 <Table style={{ minWidth: "920px" }}>
                     <TableHead>
@@ -93,17 +81,21 @@ const CourseList = () => {
                             <TableCell width="120px" align="center">Số tín chỉ</TableCell>
                             <TableCell width="190px">Bộ môn</TableCell>
                             <TableCell width="100px">Phân loại</TableCell>
+                            <TableCell width="100px" align='center'>CDIO</TableCell>
                             <TableCell width="120px" align='center'></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody className="bg-white">
                         {
                             courseList.loading
-                                ? <LoadingRows col={6} />
+                                ? <LoadingRows col={7} />
                                 : courseList.error
-                                    ? <ErrorRow refresh={refresh} />
+                                    ? <ErrorRow refresh={props.refresh} />
                                     : filteredCourseList.length !== 0
-                                        ? filteredCourseList.map(row => (
+                                        ? (rowsPerPage > 0
+                                            ? filteredCourseList.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                            : filteredCourseList
+                                        ).map(row => (
                                             <CourseRow row={row} key={row.mamh} />
                                         ))
                                         : <EmptyRow
@@ -119,6 +111,26 @@ const CourseList = () => {
                                         />
                         }
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'Tất cả', value: -1 }]}
+                                colSpan="100%"
+                                count={filteredCourseList.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: { style: { lineHeight: "16px" } },
+
+                                }}
+                                onChangePage={(e, newValue) => setPage(newValue)}
+                                onChangeRowsPerPage={(e) => {
+                                    setRowsPerPage(parseInt(e.target.value, 10));
+                                    setPage(0);
+                                }}
+                            />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
         </>

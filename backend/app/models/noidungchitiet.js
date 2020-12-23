@@ -1,10 +1,8 @@
-/* jshint indent: 2 */
-
 const Sequelize = require('sequelize');
-module.exports = function (sequelize, DataTypes) {
-  var noidungchitiet = sequelize.define('noidungchitiet', {
+module.exports = function(sequelize, DataTypes) {
+  return sequelize.define('noidungchitiet', {
     chuong: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
       allowNull: false,
       primaryKey: true
     },
@@ -45,6 +43,4 @@ module.exports = function (sequelize, DataTypes) {
       },
     ]
   });
-  noidungchitiet.removeAttribute('id');
-  return noidungchitiet;
 };
